@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const plans = [
   {
     name: 'Starter',
-    price: '$0',
+    price: '₹0',
     desc: 'Perfect for new pet owners',
     features: ['1 Pet Profile', 'Basic Health Records', 'Task Reminders', 'Community Access'],
     cta: 'Get Started',
@@ -13,7 +13,7 @@ const plans = [
   },
   {
     name: 'Pro',
-    price: '$9.99',
+    price: '₹799',
     desc: 'Advanced care for your pets',
     features: ['Unlimited Pets', 'AI Health Advisor', 'Premium Scheduling', 'Expense Tracking', 'Priority Support'],
     cta: 'Go Pro',
@@ -21,7 +21,7 @@ const plans = [
   },
   {
     name: 'Family',
-    price: '$19.99',
+    price: '₹1499',
     desc: 'For multi-pet households',
     features: ['Shared Access', 'Medical Document Storage', 'Unlimited History', 'Dedicated Vet Support'],
     cta: 'Select Family',

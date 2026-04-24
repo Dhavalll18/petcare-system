@@ -3,12 +3,12 @@ import { Stethoscope, Scissors, Home, GraduationCap, Footprints, Trees } from 'l
 import { Link } from 'react-router-dom';
 
 const servicesList = [
-  { icon: Stethoscope, title: 'Veterinary Checkup', description: 'Complete health assessments with certified veterinarians. Includes blood work, dental check, and wellness exam.', price: 'From $49', color: 'from-blue-500 to-cyan-500' },
-  { icon: Scissors, title: 'Grooming', description: 'Professional grooming services including bath, haircut, nail trim, and ear cleaning for all breeds.', price: 'From $35', color: 'from-pink-500 to-rose-500' },
-  { icon: Home, title: 'Boarding', description: 'Safe, comfortable overnight stays with 24/7 supervision, climate control, and webcam access.', price: 'From $45/night', color: 'from-violet-500 to-purple-500' },
-  { icon: GraduationCap, title: 'Training', description: 'Certified trainers for obedience, agility, and behavioral correction programs for dogs of all ages.', price: 'From $60', color: 'from-amber-500 to-orange-500' },
-  { icon: Footprints, title: 'Dog Walking', description: 'GPS-tracked walks with real-time updates, photos, and detailed walk reports sent to your phone.', price: 'From $20', color: 'from-emerald-500 to-teal-500' },
-  { icon: Trees, title: 'Pet Daycare', description: 'Supervised socialization and play in a safe environment with regular feeding and rest schedules.', price: 'From $30/day', color: 'from-indigo-500 to-blue-500' },
+  { icon: Stethoscope, title: 'Veterinary Checkup', description: 'Complete health assessments with certified veterinarians. Includes blood work, dental check, and wellness exam.', price: 'From ₹999', color: 'from-blue-500 to-cyan-500' },
+  { icon: Scissors, title: 'Grooming', description: 'Professional grooming services including bath, haircut, nail trim, and ear cleaning for all breeds.', price: 'From ₹1,499', color: 'from-pink-500 to-rose-500' },
+  { icon: Home, title: 'Boarding', description: 'Safe, comfortable overnight stays with 24/7 supervision, climate control, and webcam access.', price: 'From ₹1,999/night', color: 'from-violet-500 to-purple-500' },
+  { icon: GraduationCap, title: 'Training', description: 'Certified trainers for obedience, agility, and behavioral correction programs for dogs of all ages.', price: 'From ₹2,499', color: 'from-amber-500 to-orange-500' },
+  { icon: Footprints, title: 'Dog Walking', description: 'GPS-tracked walks with real-time updates, photos, and detailed walk reports sent to your phone.', price: 'From ₹499', color: 'from-emerald-500 to-teal-500' },
+  { icon: Trees, title: 'Pet Daycare', description: 'Supervised socialization and play in a safe environment with regular feeding and rest schedules.', price: 'From ₹1,299/day', color: 'from-indigo-500 to-blue-500' },
 ];
 
 const Services = () => {

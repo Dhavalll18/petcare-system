@@ -12,18 +12,20 @@ const servicesList = [
 ];
 
 const Services = () => {
+  const isDashboard = window.location.pathname.startsWith('/app');
+
   return (
-    <section id="services" className="py-32 bg-white">
-      <div className="container mx-auto px-4 lg:px-8">
+    <section id="services" className={`${isDashboard ? 'py-10' : 'py-20'} bg-transparent`}>
+      <div className={`${isDashboard ? '' : 'container mx-auto px-4 lg:px-8'}`}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8"
+          className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8"
         >
           <div className="max-w-2xl">
-            <span className="text-[10px] font-black text-primary-600 uppercase tracking-[0.4em] mb-4 block">Service Catalog</span>
-            <h2 className="text-4xl md:text-6xl font-display font-black text-slate-900 tracking-tighter leading-tight">
+            <span className="text-[10px] font-bold text-primary-600 uppercase tracking-[0.4em] mb-4 block">Service Catalog</span>
+            <h2 className="text-4xl md:text-6xl font-display font-bold text-slate-900 tracking-tighter leading-tight uppercase">
               Elite Care <br />For Your <span className="text-primary-600">Companion</span>
             </h2>
           </div>
@@ -40,19 +42,19 @@ const Services = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.08 }}
-              className="group bg-slate-50 rounded-[2.5rem] overflow-hidden border border-slate-100 hover:bg-white hover:shadow-2xl transition-all duration-500"
+              className="group bg-white rounded-[2.5rem] overflow-hidden border border-slate-100 hover:shadow-2xl hover:border-primary-100 transition-all duration-500"
             >
               <div className="p-10">
-                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-8 shadow-lg shadow-primary-500/10`}>
-                  <service.icon className="w-7 h-7 text-white" />
+                <div className={`w-14 h-14 rounded-2xl bg-primary-50 flex items-center justify-center mb-8 shadow-sm group-hover:bg-primary-600 transition-all duration-500`}>
+                  <service.icon className="w-7 h-7 text-primary-600 group-hover:text-white transition-all duration-500" />
                 </div>
-                <h3 className="text-2xl font-black text-slate-900 mb-4 tracking-tight">{service.title}</h3>
+                <h3 className="text-2xl font-bold text-slate-900 mb-4 tracking-tight uppercase">{service.title}</h3>
                 <p className="text-slate-500 text-sm leading-relaxed font-medium mb-8">{service.description}</p>
-                <div className="flex items-center justify-between pt-8 border-t border-slate-200/60">
-                  <span className="text-sm font-black text-slate-900 uppercase tracking-widest">{service.price}</span>
+                <div className="flex items-center justify-between pt-8 border-t border-slate-100">
+                  <span className="text-sm font-bold text-slate-900 uppercase tracking-widest">{service.price}</span>
                   <Link 
-                    to={window.location.pathname.startsWith('/app') ? `/app/schedule?service=${service.title}` : '/register'} 
-                    className="flex items-center gap-2 text-[10px] font-black text-primary-600 uppercase tracking-widest group-hover:gap-4 transition-all"
+                    to={isDashboard ? `/app/schedule?service=${service.title}` : '/register'} 
+                    className="flex items-center gap-2 text-[10px] font-bold text-primary-600 uppercase tracking-widest group-hover:gap-4 transition-all"
                   >
                     Initialize →
                   </Link>

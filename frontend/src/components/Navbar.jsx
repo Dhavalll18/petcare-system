@@ -19,8 +19,7 @@ const Navbar = () => {
               <PawPrint className="w-6 h-6 text-white transition-transform group-hover:scale-110 duration-500 relative z-10" />
             </div>
             <div className="flex flex-col">
-              <span className="font-display font-black text-2xl text-slate-900 leading-none tracking-tighter">PETCARE <span className="text-primary-600">SYSTEM</span></span>
-              <span className="text-[7px] font-black text-slate-400 uppercase tracking-[0.4em] mt-1">Professional Management</span>
+              <span className="font-display font-bold text-2xl text-slate-900 leading-none tracking-widest">PETCARE <span className="text-primary-600">SYSTEM</span></span>
             </div>
           </Link>
 

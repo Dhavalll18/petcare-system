@@ -66,7 +66,7 @@ const HealthAdvisor = () => {
                   </div>
                   <div className="text-left overflow-hidden">
                     <p className="font-bold text-sm truncate">{pet.name}</p>
-                    <p className="text-[10px] uppercase font-black text-slate-400 tracking-tight">{pet.species}</p>
+                    <p className="text-[10px] uppercase font-bold text-slate-400 tracking-tight">{pet.species}</p>
                   </div>
                 </button>
               ))}
@@ -97,7 +97,7 @@ const HealthAdvisor = () => {
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
                 <div className="flex items-center justify-between mb-4 px-2">
                    <h3 className="font-bold text-slate-800">Suggestions for {selectedPetData?.name}</h3>
-                   <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full uppercase tracking-widest border border-emerald-100">Ready</span>
+                   <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full uppercase tracking-widest border border-emerald-100">Ready</span>
                 </div>
                 <div className="grid gap-4">
                   {tips.map((tip, i) => (

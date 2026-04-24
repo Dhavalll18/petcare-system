@@ -94,13 +94,13 @@ const Schedule = () => {
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
         <div>
            <div className="flex items-center gap-2 mb-1">
-              <span className="text-[10px] font-black text-primary-600 uppercase tracking-[0.3em] bg-primary-50 px-2 py-0.5 rounded-md border border-primary-100">Booking Desk</span>
+              <span className="text-[10px] font-bold text-primary-600 uppercase tracking-[0.3em] bg-primary-50 px-2 py-0.5 rounded-md border border-primary-100">Booking Desk</span>
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
            </div>
-           <h1 className="text-4xl font-display font-black text-slate-900 tracking-tighter uppercase">Reservations</h1>
+           <h1 className="text-4xl font-display font-bold text-slate-900 tracking-tighter uppercase">Reservations</h1>
            <p className="text-slate-400 font-medium mt-1">Manage specialist visits and care sessions.</p>
         </div>
-        <button onClick={() => setShowForm(true)} className="btn-primary flex items-center justify-center gap-2 px-8 py-4 text-xs font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-primary-500/25">
+        <button onClick={() => setShowForm(true)} className="btn-primary flex items-center justify-center gap-2 px-8 py-4 text-xs font-bold uppercase tracking-widest rounded-2xl shadow-xl shadow-primary-500/25">
            <Plus className="w-4 h-4" /> New Reservation
         </button>
       </div>
@@ -113,7 +113,7 @@ const Schedule = () => {
           >
             <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-full blur-3xl -mr-32 -mt-32"></div>
             
-            <h3 className="text-xl font-black text-slate-900 mb-10 tracking-tight flex items-center gap-3 relative z-10 italic">
+            <h3 className="text-xl font-bold text-slate-900 mb-10 tracking-tight flex items-center gap-3 relative z-10 italic">
               <CalendarDays className="w-6 h-6 text-primary-500 not-italic" />
               RESERVATION PARAMETERS
             </h3>
@@ -122,7 +122,7 @@ const Schedule = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 <div className="space-y-8">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Subject Profile</label>
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">Subject Profile</label>
                     <select className="input-field py-4 text-sm font-bold" value={form.pet} onChange={e => setForm({...form, pet: e.target.value})}>
                       <option value="">Select Pet</option>
                       {pets.map(p => <option key={p._id} value={p._id}>{p.name}</option>)}
@@ -131,17 +131,17 @@ const Schedule = () => {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Timeline</label>
+                      <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">Timeline</label>
                       <input type="date" className="input-field py-4 text-sm font-bold" value={form.date} onChange={e => setForm({...form, date: e.target.value})} />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Window</label>
+                      <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">Window</label>
                       <input type="time" className="input-field py-4 text-sm font-bold" value={form.time} onChange={e => setForm({...form, time: e.target.value})} />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Service Classification</label>
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">Service Classification</label>
                     <select className="input-field py-4 text-sm font-bold" value={form.serviceType} onChange={e => setForm({...form, serviceType: e.target.value})}>
                       <option value="Checkup">Veterinary Checkup</option>
                       <option value="Grooming">Professional Grooming</option>
@@ -153,7 +153,7 @@ const Schedule = () => {
 
                 <div className="space-y-8">
                   <div className="space-y-4">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Assigned Specialist</label>
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">Assigned Specialist</label>
                     <div className="grid grid-cols-2 gap-3">
                       {providers.map(p => (
                         <button key={p.name} type="button" onClick={() => setForm({...form, provider: p.name})}
@@ -163,7 +163,7 @@ const Schedule = () => {
                           <div className="flex items-center gap-3">
                             <img src={p.img} className="w-8 h-8 rounded-full object-cover" alt="" />
                             <div className="min-w-0">
-                               <p className="text-[10px] font-black text-slate-900 truncate">{p.name}</p>
+                               <p className="text-[10px] font-bold text-slate-900 truncate">{p.name}</p>
                                <p className="text-[8px] font-bold text-slate-400 uppercase truncate">{p.role}</p>
                             </div>
                           </div>
@@ -177,13 +177,13 @@ const Schedule = () => {
                     <div className="flex-1">
                        <div className="flex items-center gap-1 text-amber-500 mb-1">
                           <Star className="w-3.5 h-3.5 fill-current" />
-                          <span className="text-sm font-black text-slate-800">{selectedProvider.rating}</span>
+                          <span className="text-sm font-bold text-slate-800">{selectedProvider.rating}</span>
                        </div>
-                       <p className="text-[8px] font-black text-slate-400 uppercase">Rating Index</p>
+                       <p className="text-[8px] font-bold text-slate-400 uppercase">Rating Index</p>
                     </div>
                     <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                       <p className="text-sm font-black text-slate-800 mb-1">{selectedProvider.reviews}</p>
-                       <p className="text-[8px] font-black text-slate-400 uppercase">Verifications</p>
+                       <p className="text-sm font-bold text-slate-800 mb-1">{selectedProvider.reviews}</p>
+                       <p className="text-[8px] font-bold text-slate-400 uppercase">Verifications</p>
                     </div>
                   </div>
                 </div>
@@ -194,17 +194,17 @@ const Schedule = () => {
                   <div className="absolute top-0 right-0 w-32 h-32 bg-primary-500/20 rounded-full blur-2xl"></div>
                   <div className="flex items-center gap-2 mb-4">
                     <Info className="w-5 h-5 text-primary-400" />
-                    <h4 className="font-black text-xs uppercase tracking-widest">Service Protocol</h4>
+                    <h4 className="font-bold text-xs uppercase tracking-widest">Service Protocol</h4>
                   </div>
                   <p className="text-[11px] text-slate-400 leading-relaxed font-medium">
                     Nullification of dispatch is permitted up to 24 hours prior to execution. Emergency deviations require direct verbal confirmation.
                   </p>
                 </div>
                 <div className="flex flex-col gap-3 min-w-[300px]">
-                  <button type="submit" disabled={saving} className="btn-primary py-5 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-primary-500/25">
+                  <button type="submit" disabled={saving} className="btn-primary py-5 rounded-2xl font-bold text-xs uppercase tracking-widest shadow-xl shadow-primary-500/25">
                     {saving ? 'Processing...' : 'Confirm Reservation'}
                   </button>
-                  <button type="button" onClick={() => setShowForm(false)} className="py-5 bg-slate-50 text-slate-500 font-black text-xs uppercase tracking-widest rounded-2xl hover:bg-slate-100 transition-all border border-slate-100 text-center">
+                  <button type="button" onClick={() => setShowForm(false)} className="py-5 bg-slate-50 text-slate-500 font-bold text-xs uppercase tracking-widest rounded-2xl hover:bg-slate-100 transition-all border border-slate-100 text-center">
                     Abort
                   </button>
                 </div>
@@ -217,17 +217,17 @@ const Schedule = () => {
       {/* Appointment Feed */}
       <div className="bg-white rounded-[3rem] border border-slate-100 shadow-soft overflow-hidden">
         <div className="p-8 border-b border-slate-50 flex items-center justify-between">
-           <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest">Reservation Log</h3>
+           <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">Reservation Log</h3>
            <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-              <span className="text-[10px] font-black text-slate-400 uppercase">Active Feed</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase">Active Feed</span>
            </div>
         </div>
 
         {safeAppts.length === 0 ? (
           <div className="py-32 text-center flex flex-col items-center">
              <CalendarDays className="w-12 h-12 text-slate-100 mb-4" />
-             <p className="text-slate-400 font-black text-xs uppercase tracking-widest">No Active Sessions</p>
+             <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">No Active Sessions</p>
           </div>
         ) : (
           <div className="divide-y divide-slate-50">
@@ -235,14 +235,14 @@ const Schedule = () => {
               <motion.div key={appt._id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.05 }}
                 className="p-8 flex flex-col md:flex-row items-start md:items-center gap-8 hover:bg-slate-50/50 transition-all group relative"
               >
-                <div className="w-16 h-16 bg-slate-900 rounded-2xl flex items-center justify-center text-primary-400 font-black text-xl shadow-xl flex-shrink-0">
+                <div className="w-16 h-16 bg-slate-900 rounded-2xl flex items-center justify-center text-primary-400 font-bold text-xl shadow-xl flex-shrink-0">
                   {appt.serviceType?.charAt(0)}
                 </div>
                 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-xl font-black text-slate-900 tracking-tight">{appt.serviceType}</h3>
-                    <span className={`px-2.5 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest border
+                    <h3 className="text-xl font-bold text-slate-900 tracking-tight">{appt.serviceType}</h3>
+                    <span className={`px-2.5 py-1 rounded-lg text-[8px] font-bold uppercase tracking-widest border
                       ${appt.status === 'Confirmed' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>
                       {appt.status || 'Active'}
                     </span>

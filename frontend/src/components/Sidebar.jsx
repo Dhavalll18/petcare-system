@@ -59,8 +59,7 @@ const Sidebar = () => {
           </div>
           {!collapsed && (
             <div className="ml-4">
-              <span className="block text-white font-display font-black text-xl tracking-tighter">PETCARE <span className="text-primary-500">SYSTEM</span></span>
-              <span className="block text-slate-500 text-[7px] font-black uppercase tracking-[0.5em] -mt-0.5">Core Interface</span>
+              <span className="block text-white font-display font-bold text-xl tracking-widest">PETCARE <span className="text-primary-500">SYSTEM</span></span>
             </div>
           )}
         </div>

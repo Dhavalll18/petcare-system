@@ -67,13 +67,13 @@ const Pets = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
         <div>
-           <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-1">Biological Records</p>
-           <h1 className="text-4xl font-display font-black text-slate-900 tracking-tighter uppercase">
+           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] mb-1">Biological Records</p>
+           <h1 className="text-4xl font-display font-bold text-slate-900 tracking-tighter uppercase">
              Pet Profiles
            </h1>
            <p className="text-slate-500 font-medium mt-1">Comprehensive biological and identification data matrix</p>
         </div>
-        <button onClick={() => setShowForm(!showForm)} className="btn-primary flex items-center justify-center gap-2 px-10 py-4 text-[10px] font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-primary-500/20 active:scale-95 transition-all">
+        <button onClick={() => setShowForm(!showForm)} className="btn-primary flex items-center justify-center gap-2 px-10 py-4 text-[10px] font-bold uppercase tracking-widest rounded-2xl shadow-xl shadow-primary-500/20 active:scale-95 transition-all">
           {showForm ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
           {showForm ? 'Abort Entry' : 'Add New Profile'}
         </button>
@@ -84,40 +84,40 @@ const Pets = () => {
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
              <form onSubmit={handleSubmit} className="bg-white rounded-[2.5rem] border border-slate-100 shadow-elevated p-8 sm:p-12 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-full blur-3xl -mr-32 -mt-32"></div>
-                <h3 className="text-xl font-black text-slate-900 mb-8 tracking-tight italic uppercase relative z-10">Manual Profile Entry</h3>
+                <h3 className="text-xl font-bold text-slate-900 mb-8 tracking-tight italic uppercase relative z-10">Manual Profile Entry</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
                   <div className="space-y-2">
-                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Biological Name *</label>
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">Biological Name *</label>
                     <input type="text" value={form.name} onChange={e => setForm({...form, name: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent focus:border-primary-500 focus:bg-white rounded-2xl p-4 text-sm font-bold transition-all outline-none" placeholder="e.g. Luna" />
                   </div>
                   <div className="space-y-2">
-                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Species Classification *</label>
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">Species Classification *</label>
                     <select value={form.species} onChange={e => setForm({...form, species: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent focus:border-primary-500 focus:bg-white rounded-2xl p-4 text-sm font-bold transition-all outline-none">
                       <option>Dog</option><option>Cat</option><option>Bird</option><option>Fish</option><option>Rabbit</option>
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Specific Breed</label>
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">Specific Breed</label>
                     <input type="text" value={form.breed} onChange={e => setForm({...form, breed: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent focus:border-primary-500 focus:bg-white rounded-2xl p-4 text-sm font-bold transition-all outline-none" placeholder="e.g. Golden Retriever" />
                   </div>
                   <div className="space-y-2">
-                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Age Parameters (Years) *</label>
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">Age Parameters (Years) *</label>
                     <input type="number" value={form.age} onChange={e => setForm({...form, age: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent focus:border-primary-500 focus:bg-white rounded-2xl p-4 text-sm font-bold transition-all outline-none" placeholder="3" />
                   </div>
                   <div className="space-y-2">
-                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Mass / Weight (kg)</label>
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">Mass / Weight (kg)</label>
                     <input type="number" value={form.weight} onChange={e => setForm({...form, weight: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent focus:border-primary-500 focus:bg-white rounded-2xl p-4 text-sm font-bold transition-all outline-none" placeholder="15" />
                   </div>
                   <div className="space-y-2">
-                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Allergens / Medical Flags</label>
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">Allergens / Medical Flags</label>
                     <input type="text" value={form.allergies} onChange={e => setForm({...form, allergies: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent focus:border-primary-500 focus:bg-white rounded-2xl p-4 text-sm font-bold transition-all outline-none" placeholder="Chicken, Dairy..." />
                   </div>
                 </div>
                 <div className="mt-10 flex gap-4 relative z-10">
-                  <button type="submit" disabled={saving} className="flex-1 btn-primary py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-primary-500/25 active:scale-95 transition-all">
+                  <button type="submit" disabled={saving} className="flex-1 btn-primary py-4 rounded-2xl font-bold text-xs uppercase tracking-widest shadow-xl shadow-primary-500/25 active:scale-95 transition-all">
                     {saving ? 'Transmitting...' : 'Finalize Profile'}
                   </button>
-                  <button type="button" onClick={() => setShowForm(false)} className="px-10 py-4 bg-slate-50 text-slate-500 font-black text-xs uppercase tracking-widest rounded-2xl hover:bg-slate-100 transition-all border border-slate-100">
+                  <button type="button" onClick={() => setShowForm(false)} className="px-10 py-4 bg-slate-50 text-slate-500 font-bold text-xs uppercase tracking-widest rounded-2xl hover:bg-slate-100 transition-all border border-slate-100">
                     Cancel
                   </button>
                 </div>
@@ -141,9 +141,9 @@ const Pets = () => {
           <div className="w-24 h-24 bg-slate-50 rounded-[2.5rem] flex items-center justify-center mx-auto mb-6">
             <Footprints className="w-10 h-10 text-slate-200" />
           </div>
-          <h3 className="text-xl font-black text-slate-800 tracking-tight italic uppercase">Profile Matrix Empty</h3>
+          <h3 className="text-xl font-bold text-slate-800 tracking-tight italic uppercase">Profile Matrix Empty</h3>
           <p className="text-slate-400 text-sm font-medium mt-2 max-w-xs mx-auto">No biological profiles have been initialized in the system.</p>
-          <button onClick={() => setShowForm(true)} className="btn-primary mt-10 px-10 py-4 text-[10px] font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-primary-500/20">Initialize Profile</button>
+          <button onClick={() => setShowForm(true)} className="btn-primary mt-10 px-10 py-4 text-[10px] font-bold uppercase tracking-widest rounded-2xl shadow-xl shadow-primary-500/20">Initialize Profile</button>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -168,19 +168,19 @@ const Pets = () => {
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-2xl font-black text-slate-900 tracking-tight leading-none italic uppercase">{pet.name}</h3>
-                    <p className="text-[10px] font-black text-primary-600 uppercase tracking-widest mt-2">{pet.breed || pet.species}</p>
+                    <h3 className="text-2xl font-bold text-slate-900 tracking-tight leading-none italic uppercase">{pet.name}</h3>
+                    <p className="text-[10px] font-bold text-primary-600 uppercase tracking-widest mt-2">{pet.breed || pet.species}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                    <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">Maturity</p>
-                    <p className="text-sm font-black text-slate-800">{getAgeDescriptor(pet.age)}</p>
+                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Maturity</p>
+                    <p className="text-sm font-bold text-slate-800">{getAgeDescriptor(pet.age)}</p>
                   </div>
                   <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                    <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">Mass (kg)</p>
-                    <p className="text-sm font-black text-slate-800">{pet.weight || '--'}</p>
+                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Mass (kg)</p>
+                    <p className="text-sm font-bold text-slate-800">{pet.weight || '--'}</p>
                   </div>
                 </div>
 
@@ -188,7 +188,7 @@ const Pets = () => {
                   <div className="p-5 bg-rose-50 rounded-2xl border border-rose-100 flex items-start gap-4">
                     <AlertTriangle className="w-5 h-5 text-rose-500 flex-shrink-0 mt-0.5" />
                     <div className="min-w-0">
-                       <p className="text-[10px] font-black text-rose-600 uppercase tracking-widest">Medical Alert</p>
+                       <p className="text-[10px] font-bold text-rose-600 uppercase tracking-widest">Medical Alert</p>
                        <p className="text-xs text-rose-700 font-bold leading-relaxed mt-1 truncate">{pet.allergies.join(', ')}</p>
                     </div>
                   </div>
@@ -197,9 +197,9 @@ const Pets = () => {
                 <div className="pt-4 flex items-center justify-between border-t border-slate-50">
                    <div className="flex items-center gap-2">
                       <Activity className="w-4 h-4 text-emerald-500" />
-                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Vitals Active</span>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Vitals Active</span>
                    </div>
-                   <button className="text-xs font-black text-primary-600 uppercase tracking-widest hover:underline flex items-center gap-1">
+                   <button className="text-xs font-bold text-primary-600 uppercase tracking-widest hover:underline flex items-center gap-1">
                       Full Report <ChevronRight className="w-3.5 h-3.5" />
                    </button>
                 </div>

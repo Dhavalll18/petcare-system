@@ -19,24 +19,24 @@ const Hero = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            {/* Elite Badge */}
+            {/* Enterprise Badge */}
             <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-2xl px-6 py-2 mb-10 shadow-2xl">
               <div className="flex -space-x-2">
                  {[1,2,3].map(i => <div key={i} className="w-6 h-6 rounded-full border-2 border-slate-900 bg-primary-500"></div>)}
               </div>
               <span className="text-[10px] text-white font-black uppercase tracking-[0.3em]">
-                Trusted by 50,000+ Pet Parents
+                Complete Pet Management Platform
               </span>
-              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+              <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
             </div>
 
             <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-display font-black text-white leading-[0.9] tracking-tighter mb-8">
-              THE FUTURE<br />
-              <span className="text-primary-500">OF PET CARE</span>
+              PREMIUM CARE<br />
+              <span className="text-primary-500">REDEFINED</span>
             </h1>
 
-            <p className="text-lg md:text-2xl text-slate-400 mb-12 max-w-3xl mx-auto font-medium leading-relaxed italic">
-              "Experience the world's most advanced AI-integrated pet management ecosystem designed for the modern pet parent."
+            <p className="text-lg md:text-2xl text-slate-400 mb-12 max-w-3xl mx-auto font-medium leading-relaxed">
+              "The most comprehensive ecosystem for tracking health, managing appointments, and ensuring a better life for your furry companions."
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">

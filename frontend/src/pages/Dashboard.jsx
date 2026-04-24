@@ -273,22 +273,22 @@ const Dashboard = () => {
 
          {/* Sidebar Widgets */}
          <div className="space-y-10">
-            {/* AI Insights Widget */}
-            <div className="bg-gradient-to-br from-slate-900 to-primary-900 rounded-[3rem] p-10 text-white shadow-2xl relative overflow-hidden group">
-               <div className="absolute top-0 right-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+            {/* Health Insights Widget */}
+            <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-[3rem] p-10 text-white shadow-2xl relative overflow-hidden group">
+               <div className="absolute top-0 right-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
                <div className="relative z-10">
                   <div className="flex items-center justify-between mb-10">
-                     <div className="w-14 h-14 bg-primary-500 rounded-2xl flex items-center justify-center shadow-lg shadow-primary-500/20">
-                        <Sparkles className="w-7 h-7 text-white" />
+                     <div className="w-14 h-14 bg-primary-600 rounded-2xl flex items-center justify-center shadow-lg shadow-primary-600/20">
+                        <Activity className="w-7 h-7 text-white" />
                      </div>
-                     <span className="text-[10px] font-black text-primary-400 uppercase tracking-[0.3em]">AI Engine v2.0</span>
+                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Smart Monitoring</span>
                   </div>
-                  <h3 className="text-3xl font-display font-black text-white leading-tight mb-6 italic">Neural <br />Diagnostics</h3>
-                  <p className="text-slate-400 text-sm font-medium leading-relaxed mb-10 italic">
-                    "Luna's recent activity data indicates a 15% increase in rest phases. Consider a wellness checkup if this persists over 48 hours."
+                  <h3 className="text-3xl font-display font-black text-white leading-tight mb-6">Health <br />Insights</h3>
+                  <p className="text-slate-400 text-sm font-medium leading-relaxed mb-10">
+                    "Luna's activity patterns are consistent with healthy recovery. Monitor water intake over the next 24 hours for optimal wellness."
                   </p>
                   <Link to="/app/health" className="w-full py-5 bg-white text-slate-900 font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl text-center block hover:bg-primary-50 transition-all shadow-xl">
-                     Initialize Diagnostic
+                     View Wellness Report
                   </Link>
                </div>
             </div>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, X, CalendarDays, Clock, CheckCircle2, AlertCircle, XCircle, User, Info, MapPin, Phone, Star } from 'lucide-react';
+import { Plus, X, CalendarDays, Clock, CheckCircle2, AlertCircle, XCircle, User, Info, MapPin, Phone, Star, Circle, PawPrint } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
 

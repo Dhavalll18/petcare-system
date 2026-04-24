@@ -1,19 +1,38 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, X, CalendarDays, Clock, CheckCircle2, AlertCircle, XCircle } from 'lucide-react';
+import { Plus, X, CalendarDays, Clock, CheckCircle2, AlertCircle, XCircle, User, Info } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
 
 const Schedule = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const initialService = queryParams.get('service') || 'Veterinary Checkup';
+
   const [appointments, setAppointments] = useState([]);
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(initialService !== 'Veterinary Checkup' || queryParams.get('open') === 'true');
   const [saving, setSaving] = useState(false);
-  const [form, setForm] = useState({ pet: '', serviceType: 'Veterinary Checkup', date: '', time: '10:00 AM', reason: '', notes: '' });
+  const [form, setForm] = useState({ 
+    pet: '', 
+    serviceType: initialService, 
+    date: new Date().toISOString().split('T')[0], 
+    time: '10:00 AM', 
+    reason: initialService !== 'Veterinary Checkup' ? `Booking for ${initialService}` : '', 
+    notes: '',
+    provider: 'Dr. Sarah Wilson'
+  });
 
   const timeSlots = ['09:00 AM','10:00 AM','11:00 AM','12:00 PM','02:00 PM','03:00 PM','04:00 PM','05:00 PM'];
-  const serviceTypes = ['Veterinary Checkup','Grooming','Boarding','Training','Walking','Other'];
+  const serviceTypes = ['Veterinary Checkup','Grooming','Boarding','Training','Dog Walking','Pet Daycare','Other'];
+  const providers = [
+    { name: 'Dr. Sarah Wilson', role: 'Senior Vet', rating: '4.9' },
+    { name: 'Michael Chen', role: 'Professional Groomer', rating: '4.8' },
+    { name: 'Jessica Miller', role: 'Pet Trainer', rating: '5.0' },
+    { name: 'David Smith', role: 'Care Specialist', rating: '4.7' },
+  ];
 
   const fetchData = async () => {
     try {
@@ -95,8 +114,14 @@ const Schedule = () => {
                       </select>
                     </div>
                     <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1.5">Service Provider *</label>
+                      <select value={form.provider} onChange={e => setForm({...form, provider: e.target.value})} className="select-field">
+                        {providers.map(p => <option key={p.name} value={p.name}>{p.name} ({p.role})</option>)}
+                      </select>
+                    </div>
+                    <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5">Date *</label>
-                      <input type="date" value={form.date} onChange={e => setForm({...form, date: e.target.value})} className="input-field" />
+                      <input type="date" min={new Date().toISOString().split('T')[0]} value={form.date} onChange={e => setForm({...form, date: e.target.value})} className="input-field" />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5">Time Slot</label>
@@ -104,13 +129,21 @@ const Schedule = () => {
                         {timeSlots.map(t => <option key={t} value={t}>{t}</option>)}
                       </select>
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-1.5">Reason *</label>
-                      <input type="text" value={form.reason} onChange={e => setForm({...form, reason: e.target.value})} className="input-field" placeholder="Annual checkup" />
+                    <div className="lg:col-span-2">
+                      <label className="block text-sm font-medium text-slate-700 mb-1.5">Reason for Visit *</label>
+                      <input type="text" value={form.reason} onChange={e => setForm({...form, reason: e.target.value})} className="input-field" placeholder="e.g. Annual vaccination or specific concern" />
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-1.5">Notes</label>
-                      <input type="text" value={form.notes} onChange={e => setForm({...form, notes: e.target.value})} className="input-field" placeholder="Any special requests" />
+                    <div className="lg:col-span-3">
+                      <label className="block text-sm font-medium text-slate-700 mb-1.5">Additional Notes</label>
+                      <textarea rows="2" value={form.notes} onChange={e => setForm({...form, notes: e.target.value})} className="input-field" placeholder="Any special instructions for the provider..." />
+                    </div>
+                  </div>
+
+                  <div className="mt-6 p-4 bg-primary-50 rounded-xl border border-primary-100 flex items-start gap-3">
+                    <Info className="w-5 h-5 text-primary-600 mt-0.5" />
+                    <div className="text-sm text-primary-800">
+                      <p className="font-bold">Booking Summary</p>
+                      <p>You are booking <strong>{form.serviceType}</strong> with <strong>{form.provider}</strong> on <strong>{form.date}</strong> at <strong>{form.time}</strong>.</p>
                     </div>
                   </div>
                   <div className="mt-6 flex gap-3">

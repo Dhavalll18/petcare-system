@@ -6,6 +6,7 @@ import useAuthStore from '../store/authStore';
 const menuItems = [
   { label: 'Dashboard', icon: LayoutDashboard, path: '/app' },
   { label: 'My Pets', icon: PawPrint, path: '/app/pets' },
+  { label: 'Services', icon: Heart, path: '/app/services' },
   { label: 'Schedule', icon: CalendarDays, path: '/app/schedule' },
   { label: 'Tasks', icon: ListChecks, path: '/app/tasks' },
   { label: 'AI Advisor', icon: Sparkles, path: '/app/health' },

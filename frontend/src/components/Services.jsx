@@ -46,7 +46,10 @@ const Services = () => {
                 <p className="text-slate-500 text-sm leading-relaxed mb-4">{service.description}</p>
                 <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                   <span className="text-sm font-bold text-primary-600">{service.price}</span>
-                  <Link to="/register" className="text-sm font-semibold text-primary-600 hover:text-primary-700 flex items-center gap-1 group-hover:gap-2 transition-all">
+                  <Link 
+                    to={window.location.pathname.startsWith('/app') ? `/app/schedule?service=${service.title}` : '/register'} 
+                    className="text-sm font-semibold text-primary-600 hover:text-primary-700 flex items-center gap-1 group-hover:gap-2 transition-all"
+                  >
                     Book Now →
                   </Link>
                 </div>

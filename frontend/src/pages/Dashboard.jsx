@@ -57,11 +57,19 @@ const Dashboard = () => {
   return (
     <div className="animate-fade-in">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl lg:text-3xl font-display font-bold text-slate-800">
-          Welcome back, {user?.name?.split(' ')[0]} <span className="inline-block animate-wave">👋</span>
-        </h1>
-        <p className="text-slate-500 mt-1">Here's what's happening with your pets today.</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <h1 className="text-2xl lg:text-3xl font-display font-bold text-slate-800">
+              Welcome back, {user?.name?.split(' ')[0]} <span className="inline-block animate-wave">👋</span>
+            </h1>
+            <span className="bg-gradient-to-r from-amber-400 to-orange-500 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded-full shadow-sm">Pro Member</span>
+          </div>
+          <p className="text-slate-500">Premium PetCare Account · All Enterprise Features Unlocked</p>
+        </div>
+        <Link to="/app/services" className="btn-primary py-2.5 px-6 text-sm shadow-md hover:shadow-lg transition-all flex items-center gap-2">
+          <Sparkles className="w-4 h-4" /> Discover Services
+        </Link>
       </div>
 
       {/* Stats Grid */}

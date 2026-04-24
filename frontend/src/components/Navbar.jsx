@@ -14,10 +14,14 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
-              <PawPrint className="w-5 h-5 text-white" />
+            <div className="w-11 h-11 bg-slate-900 rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-500 relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary-400/20 to-transparent"></div>
+              <PawPrint className="w-6 h-6 text-primary-400 relative z-10" />
             </div>
-            <span className="font-display font-bold text-xl text-slate-800">PetCare<span className="text-primary-500">.</span></span>
+            <div className="flex flex-col">
+              <span className="font-display font-black text-xl text-slate-900 leading-none tracking-tighter">PETCARE<span className="text-primary-500">AI</span></span>
+              <span className="text-[8px] font-black text-slate-400 uppercase tracking-[0.3em] mt-1">Enterprise SaaS</span>
+            </div>
           </Link>
 
           {/* Desktop Nav */}

@@ -54,13 +54,13 @@ const Sidebar = () => {
       <aside className={`hidden lg:flex fixed left-0 top-0 h-screen bg-slate-950 border-r border-slate-900 shadow-2xl transition-all duration-500 z-[100] flex-col ${collapsed ? 'w-24' : 'w-72'}`}>
         {/* Branding */}
         <div className={`h-24 flex items-center ${collapsed ? 'justify-center' : 'px-8'}`}>
-          <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-primary-600/40">
-            <Heart className="w-6 h-6 text-white" fill="currentColor" />
+          <div className="w-12 h-12 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center shadow-lg group hover:bg-primary-500/10 transition-colors duration-500">
+            <Footprints className="w-6 h-6 text-primary-400 group-hover:scale-110 transition-transform" />
           </div>
           {!collapsed && (
             <div className="ml-4">
-              <span className="block text-white font-display font-black text-2xl tracking-tighter">PetCare<span className="text-primary-500">.</span></span>
-              <span className="block text-slate-500 text-[10px] font-bold uppercase tracking-[0.3em] -mt-1">Management Hub</span>
+              <span className="block text-white font-display font-black text-xl tracking-tighter">PETCARE<span className="text-primary-500">AI</span></span>
+              <span className="block text-slate-500 text-[8px] font-black uppercase tracking-[0.4em] -mt-0.5">Core Engine</span>
             </div>
           )}
         </div>

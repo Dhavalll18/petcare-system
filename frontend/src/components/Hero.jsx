@@ -13,46 +13,48 @@ const Hero = () => {
       </div>
 
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-5xl mx-auto text-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 mb-8">
-              <Sparkles className="w-4 h-4 text-accent-400" />
-              <span className="text-sm text-white/80 font-medium">AI-Powered Pet Health Insights</span>
+            {/* Elite Badge */}
+            <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-2xl px-6 py-2 mb-10 shadow-2xl">
+              <div className="flex -space-x-2">
+                 {[1,2,3].map(i => <div key={i} className="w-6 h-6 rounded-full border-2 border-slate-900 bg-primary-500"></div>)}
+              </div>
+              <span className="text-[10px] text-white font-black uppercase tracking-[0.3em]">
+                Trusted by 50,000+ Pet Parents
+              </span>
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-extrabold text-white leading-tight mb-6">
-              Your Pet's Health,{' '}
-              <span className="bg-gradient-to-r from-primary-300 via-accent-300 to-primary-200 bg-clip-text text-transparent">
-                Simplified
-              </span>
+            <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-display font-black text-white leading-[0.9] tracking-tighter mb-8">
+              THE FUTURE<br />
+              <span className="text-primary-500">OF PET CARE</span>
             </h1>
 
-            <p className="text-lg md:text-xl text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed">
-              Track health records, book vet appointments, manage daily care routines, and get AI-powered wellness tips — all in one beautiful platform.
+            <p className="text-lg md:text-2xl text-slate-400 mb-12 max-w-3xl mx-auto font-medium leading-relaxed italic">
+              "Experience the world's most advanced AI-integrated pet management ecosystem designed for the modern pet parent."
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <Link
                 to="/register"
-                className="group bg-white text-primary-700 font-bold py-3.5 px-8 rounded-xl
-                         hover:bg-primary-50 transition-all duration-300 shadow-elevated hover:shadow-xl
-                         flex items-center gap-2 text-base"
+                className="group bg-primary-600 text-white font-black py-5 px-12 rounded-2xl
+                         hover:bg-primary-500 transition-all duration-500 shadow-2xl shadow-primary-600/30
+                         flex items-center gap-3 text-sm uppercase tracking-widest"
               >
-                Start for Free
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                Get Started Free
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
               </Link>
               <Link
                 to="/login"
-                className="text-white/80 font-medium py-3.5 px-8 rounded-xl border border-white/20
-                         hover:bg-white/10 hover:text-white transition-all duration-300 flex items-center gap-2 text-base"
+                className="bg-white/5 text-white font-black py-5 px-12 rounded-2xl border border-white/10
+                         hover:bg-white/10 hover:border-white/20 transition-all duration-500 flex items-center gap-3 text-sm uppercase tracking-widest"
               >
-                <Shield className="w-4 h-4" />
-                Sign in to Dashboard
+                Live Demo
               </Link>
             </div>
           </motion.div>

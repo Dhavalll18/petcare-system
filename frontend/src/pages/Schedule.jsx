@@ -1,9 +1,27 @@
 import { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, X, CalendarDays, Clock, CheckCircle, AlertCircle, XCircle, User, Info, MapPin, Phone, Star, Circle, Footprints } from 'lucide-react';
+import { Plus, X, CalendarDays, Clock, CheckCircle, AlertCircle, XCircle, User, Info, MapPin, Phone, Star, Circle, Footprints, ChevronRight, Calendar } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
+
+// Professional Date Formatter
+const formatApptDate = (dateString) => {
+  const date = new Date(dateString);
+  const now = new Date();
+  now.setHours(0,0,0,0);
+  const checkDate = new Date(date);
+  checkDate.setHours(0,0,0,0);
+  
+  const diffTime = checkDate - now;
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 0) return 'Today';
+  if (diffDays === 1) return 'Tomorrow';
+  if (diffDays > 1 && diffDays < 7) return `in ${diffDays} days`;
+  
+  return new Intl.DateTimeFormat('en-US', { weekday: 'short', month: 'short', day: 'numeric' }).format(date);
+};
 
 const Schedule = () => {
   const location = useLocation();
@@ -39,7 +57,7 @@ const Schedule = () => {
       const [apptRes, petRes] = await Promise.all([api.get('/appointments'), api.get('/pets')]);
       setAppointments(apptRes.data);
       setPets(petRes.data);
-    } catch { toast.error('Failed to load data'); }
+    } catch { toast.error('Failed to load system data'); }
     finally { setLoading(false); }
   };
 
@@ -47,152 +65,158 @@ const Schedule = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.pet || !form.date || !form.reason) return toast.error('Please fill required fields');
+    if (!form.pet || !form.date || !form.reason) return toast.error('Required fields must be finalized');
     setSaving(true);
     try {
       await api.post('/appointments', form);
-      toast.success('Booking Successful!', { icon: '📅' });
+      toast.success('Reservation Confirmed', { icon: '📅' });
       setShowForm(false);
       fetchData();
-    } catch (err) { toast.error(err.response?.data?.message || 'Failed to book'); }
+    } catch (err) { toast.error(err.response?.data?.message || 'Transaction failed'); }
     finally { setSaving(false); }
   };
 
   const updateStatus = async (id, status) => {
     try {
       await api.put(`/appointments/${id}`, { status });
-      toast.success(`Appointment ${status}`);
+      toast.success(`Booking status updated to ${status}`);
       fetchData();
-    } catch { toast.error('Update failed'); }
+    } catch { toast.error('Sync error'); }
   };
 
   const deleteAppt = async (id) => {
-    if (!window.confirm('Cancel this appointment?')) return;
-    try { await api.delete(`/appointments/${id}`); toast.success('Appointment Cancelled'); fetchData(); }
+    if (!window.confirm('Cancel this operational booking?')) return;
+    try { await api.delete(`/appointments/${id}`); toast.success('Booking Nullified'); fetchData(); }
     catch { toast.error('Cancellation failed'); }
   };
 
   const statusStyles = {
-    Pending: 'bg-amber-100 text-amber-700',
-    Confirmed: 'bg-blue-100 text-blue-700',
-    Completed: 'bg-emerald-100 text-emerald-700',
-    Cancelled: 'bg-rose-100 text-rose-700',
+    Pending: 'bg-amber-100 text-amber-700 border-amber-200',
+    Confirmed: 'bg-indigo-100 text-indigo-700 border-indigo-200',
+    Completed: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+    Cancelled: 'bg-rose-100 text-rose-700 border-rose-200',
   };
 
   const selectedProvider = providers.find(p => p.name === form.provider) || providers[0];
 
   return (
-    <div className="animate-fade-in max-w-6xl mx-auto">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+    <div className="max-w-6xl mx-auto space-y-10 pb-20 animate-fade-in">
+      {/* Header Area */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
         <div>
-          <h1 className="text-2xl lg:text-3xl font-display font-bold text-slate-800">Booking Center</h1>
-          <p className="text-slate-500 mt-1">Professional care services for your beloved pets.</p>
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-1">Service Dispatch</p>
+          <h1 className="text-4xl font-display font-black text-slate-900 tracking-tighter italic">
+            BOOKING DESK<span className="text-primary-500 not-italic">.</span>
+          </h1>
+          <p className="text-slate-400 font-medium mt-1">Professional scheduling and resource allocation hub.</p>
         </div>
-        <button onClick={() => setShowForm(!showForm)} className="btn-primary flex items-center gap-2 text-sm px-6">
+        <button onClick={() => setShowForm(!showForm)} className="btn-primary flex items-center justify-center gap-2 px-10 py-4 text-[10px] font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-primary-500/20 transition-all active:scale-95">
           {showForm ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-          {showForm ? 'Close Form' : 'New Booking'}
+          {showForm ? 'Abort Dispatch' : 'New Dispatch'}
         </button>
       </div>
 
       <AnimatePresence>
         {showForm && (
-          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="mb-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <form onSubmit={handleSubmit} className="lg:col-span-2 bg-white rounded-3xl border border-slate-100 shadow-elevated p-8">
-                <h3 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-                  <CalendarDays className="w-5 h-5 text-primary-500" />
-                  Reservation Details
+          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <form onSubmit={handleSubmit} className="lg:col-span-2 bg-white rounded-[2.5rem] border border-slate-100 shadow-elevated p-8 sm:p-12 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-full blur-3xl -mr-32 -mt-32"></div>
+                
+                <h3 className="text-xl font-black text-slate-900 mb-10 tracking-tight flex items-center gap-3 relative z-10 italic">
+                  <Calendar className="w-6 h-6 text-primary-500 not-italic" />
+                  RESERVATION PARAMETERS
                 </h3>
                 
-                {pets.length === 0 ? (
-                  <div className="p-10 text-center bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
-                    <p className="text-slate-500 mb-4 font-medium">You need to add a pet profile before booking a service.</p>
-                    <Link to="/app/pets" className="btn-primary py-2 text-sm">Add Pet Now</Link>
-                  </div>
-                ) : (
-                  <div className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                      <div>
-                        <label className="block text-sm font-bold text-slate-700 mb-1.5">Select Pet *</label>
-                        <select value={form.pet} onChange={e => setForm({...form, pet: e.target.value})} className="select-field bg-slate-50 border-transparent focus:bg-white transition-all">
-                          <option value="">Which pet is this for?</option>
-                          {pets.map(p => <option key={p._id} value={p._id}>{p.name} ({p.species})</option>)}
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-bold text-slate-700 mb-1.5">Service Type *</label>
-                        <select value={form.serviceType} onChange={e => setForm({...form, serviceType: e.target.value})} className="select-field bg-slate-50 border-transparent focus:bg-white transition-all">
-                          {serviceTypes.map(s => <option key={s} value={s}>{s}</option>)}
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-bold text-slate-700 mb-1.5">Choose Provider *</label>
-                        <select value={form.provider} onChange={e => setForm({...form, provider: e.target.value})} className="select-field bg-slate-50 border-transparent focus:bg-white transition-all">
-                          {providers.map(p => <option key={p.name} value={p.name}>{p.name} ({p.role})</option>)}
-                        </select>
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-sm font-bold text-slate-700 mb-1.5">Date *</label>
-                          <input type="date" min={new Date().toISOString().split('T')[0]} value={form.date} onChange={e => setForm({...form, date: e.target.value})} className="input-field bg-slate-50 border-transparent focus:bg-white transition-all" />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-bold text-slate-700 mb-1.5">Time *</label>
-                          <select value={form.time} onChange={e => setForm({...form, time: e.target.value})} className="select-field bg-slate-50 border-transparent focus:bg-white transition-all">
-                            {timeSlots.map(t => <option key={t} value={t}>{t}</option>)}
-                          </select>
-                        </div>
-                      </div>
+                <div className="space-y-8 relative z-10">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Select Target Pet *</label>
+                      <select value={form.pet} onChange={e => setForm({...form, pet: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent focus:border-primary-500 focus:bg-white rounded-2xl p-4 text-sm font-bold transition-all outline-none appearance-none">
+                        <option value="">Operational target...</option>
+                        {pets.map(p => <option key={p._id} value={p._id}>{p.name}</option>)}
+                      </select>
                     </div>
-
-                    <div>
-                      <label className="block text-sm font-bold text-slate-700 mb-1.5">Main Reason for Booking *</label>
-                      <input type="text" value={form.reason} onChange={e => setForm({...form, reason: e.target.value})} className="input-field bg-slate-50 border-transparent focus:bg-white transition-all" placeholder="Briefly describe what your pet needs..." />
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Service Classification *</label>
+                      <select value={form.serviceType} onChange={e => setForm({...form, serviceType: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent focus:border-primary-500 focus:bg-white rounded-2xl p-4 text-sm font-bold transition-all outline-none">
+                        {serviceTypes.map(s => <option key={s} value={s}>{s}</option>)}
+                      </select>
                     </div>
-
-                    <div className="flex gap-4 pt-4">
-                      <button type="submit" disabled={saving} className="btn-primary flex-1 py-4 shadow-lg shadow-primary-500/30">
-                        {saving ? 'Processing...' : 'Confirm Reservation'}
-                      </button>
-                      <button type="button" onClick={() => setShowForm(false)} className="px-6 py-4 rounded-xl border border-slate-200 text-slate-500 font-bold hover:bg-slate-50 transition-all">
-                        Cancel
-                      </button>
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Designated Professional *</label>
+                      <select value={form.provider} onChange={e => setForm({...form, provider: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent focus:border-primary-500 focus:bg-white rounded-2xl p-4 text-sm font-bold transition-all outline-none">
+                        {providers.map(p => <option key={p.name} value={p.name}>{p.name} ({p.role})</option>)}
+                      </select>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Dispatch Date *</label>
+                        <input type="date" min={new Date().toISOString().split('T')[0]} value={form.date} onChange={e => setForm({...form, date: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent focus:border-primary-500 focus:bg-white rounded-2xl p-4 text-sm font-bold transition-all outline-none" />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Target Window *</label>
+                        <select value={form.time} onChange={e => setForm({...form, time: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent focus:border-primary-500 focus:bg-white rounded-2xl p-4 text-sm font-bold transition-all outline-none">
+                          {timeSlots.map(t => <option key={t} value={t}>{t}</option>)}
+                        </select>
+                      </div>
                     </div>
                   </div>
-                )}
+
+                  <div className="space-y-2">
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Primary Objective *</label>
+                    <input type="text" value={form.reason} onChange={e => setForm({...form, reason: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent focus:border-primary-500 focus:bg-white rounded-2xl p-4 text-sm font-bold transition-all outline-none" placeholder="Briefly describe the clinical or care requirement..." />
+                  </div>
+
+                  <div className="flex gap-4 pt-6">
+                    <button type="submit" disabled={saving} className="flex-1 btn-primary py-5 rounded-[1.25rem] font-black text-xs uppercase tracking-widest shadow-xl shadow-primary-500/25 active:scale-95 transition-all">
+                      {saving ? 'Transmitting...' : 'Finalize Reservation'}
+                    </button>
+                    <button type="button" onClick={() => setShowForm(false)} className="px-10 py-5 bg-slate-50 text-slate-500 font-black text-xs uppercase tracking-widest rounded-[1.25rem] hover:bg-slate-100 transition-all border border-slate-100">
+                      Abort
+                    </button>
+                  </div>
+                </div>
               </form>
 
-              {/* Provider Preview Sidebar */}
-              <div className="space-y-6">
-                <div className="bg-white rounded-3xl border border-slate-100 shadow-soft p-6">
-                  <h4 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">Selected Professional</h4>
-                  <div className="flex items-center gap-4 mb-6">
-                    <img src={selectedProvider.img} alt={selectedProvider.name} className="w-16 h-16 rounded-2xl object-cover shadow-md" />
-                    <div>
-                      <p className="font-bold text-slate-800 text-lg">{selectedProvider.name}</p>
-                      <p className="text-sm text-primary-600 font-medium">{selectedProvider.role}</p>
+              {/* Professional Insight Sidebar */}
+              <div className="space-y-8">
+                <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-soft p-8 text-center sm:text-left">
+                  <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Assigned Resource</h4>
+                  <div className="flex flex-col sm:flex-row items-center gap-6 mb-8">
+                    <img src={selectedProvider.img} alt="" className="w-24 h-24 rounded-[2rem] object-cover shadow-xl border-4 border-white ring-1 ring-slate-100" />
+                    <div className="text-center sm:text-left">
+                      <p className="font-black text-slate-900 text-xl leading-tight">{selectedProvider.name}</p>
+                      <p className="text-xs text-primary-600 font-bold uppercase mt-1 tracking-tighter">{selectedProvider.role}</p>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl mb-6">
-                    <div className="flex items-center gap-1 text-amber-500">
-                      <Star className="w-4 h-4 fill-current" />
-                      <span className="font-bold text-slate-800">{selectedProvider.rating}</span>
+                  <div className="grid grid-cols-2 gap-3 mb-8">
+                    <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                       <div className="flex items-center gap-1 text-amber-500 mb-1">
+                          <Star className="w-3.5 h-3.5 fill-current" />
+                          <span className="text-sm font-black text-slate-800">{selectedProvider.rating}</span>
+                       </div>
+                       <p className="text-[8px] font-black text-slate-400 uppercase">Rating Index</p>
                     </div>
-                    <span className="text-xs text-slate-400 font-medium">{selectedProvider.reviews} verified reviews</span>
+                    <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                       <p className="text-sm font-black text-slate-800 mb-1">{selectedProvider.reviews}</p>
+                       <p className="text-[8px] font-black text-slate-400 uppercase">Verifications</p>
+                    </div>
                   </div>
-                  <div className="space-y-3 text-sm text-slate-500">
-                    <div className="flex items-center gap-2"><MapPin className="w-4 h-4" /> 2.4 miles away (Downtown)</div>
-                    <div className="flex items-center gap-2"><Phone className="w-4 h-4" /> Available for messaging</div>
+                  <div className="space-y-4 text-[10px] font-bold text-slate-500">
+                    <div className="flex items-center gap-3"><MapPin className="w-4 h-4 text-primary-400" /> Operational in Downtown Area</div>
+                    <div className="flex items-center gap-3"><Phone className="w-4 h-4 text-primary-400" /> Real-time comms active</div>
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-6 text-white shadow-xl">
+                <div className="bg-slate-900 rounded-[2.5rem] p-8 text-white shadow-2xl relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-primary-500/20 rounded-full blur-2xl"></div>
                   <div className="flex items-center gap-2 mb-4">
-                    <div className="p-2 bg-white/10 rounded-lg"><Info className="w-4 h-4" /></div>
-                    <h4 className="font-bold">Booking Policy</h4>
+                    <Info className="w-5 h-5 text-primary-400" />
+                    <h4 className="font-black text-xs uppercase tracking-widest">Service Protocol</h4>
                   </div>
-                  <p className="text-xs text-slate-300 leading-relaxed">
-                    Free cancellation up to 24 hours before the appointment. For emergency changes, please contact the provider directly.
+                  <p className="text-[11px] text-slate-400 leading-relaxed font-medium">
+                    Nullification of dispatch is permitted up to 24 hours prior to execution. Emergency deviations require direct verbal confirmation.
                   </p>
                 </div>
               </div>
@@ -201,63 +225,66 @@ const Schedule = () => {
         )}
       </AnimatePresence>
 
-      <div className="bg-white rounded-3xl border border-slate-100 shadow-soft overflow-hidden">
-        <div className="px-8 py-6 border-b border-slate-50 flex items-center justify-between bg-slate-50/50">
-          <h2 className="font-bold text-slate-800">Appointment History</h2>
-          <div className="flex gap-2">
-             <span className="text-xs font-medium text-slate-400 flex items-center gap-1"><Circle className="w-2 h-2 fill-amber-500 text-amber-500" /> Pending</span>
-             <span className="text-xs font-medium text-slate-400 flex items-center gap-1"><Circle className="w-2 h-2 fill-blue-500 text-blue-500" /> Confirmed</span>
+      {/* Dispatch History Grid */}
+      <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-soft overflow-hidden">
+        <div className="px-10 py-8 border-b border-slate-50 flex items-center justify-between bg-slate-50/30">
+          <h2 className="text-lg font-black text-slate-900 tracking-tight italic uppercase">Dispatch Log History</h2>
+          <div className="hidden sm:flex items-center gap-4">
+             <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-amber-500"></div><span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Pending</span></div>
+             <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-indigo-500"></div><span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Confirmed</span></div>
           </div>
         </div>
         
         {loading ? (
-          <div className="p-8 space-y-4">{[1,2,3].map(i => <div key={i} className="skeleton h-24 rounded-2xl"></div>)}</div>
+          <div className="p-10 space-y-4">{[1,2,3].map(i => <div key={i} className="skeleton h-24 rounded-3xl"></div>)}</div>
         ) : appointments.length === 0 ? (
-          <div className="text-center py-24">
-            <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
+          <div className="text-center py-32">
+            <div className="w-24 h-24 bg-slate-50 rounded-[2.5rem] flex items-center justify-center mx-auto mb-6">
               <CalendarDays className="w-10 h-10 text-slate-200" />
             </div>
-            <h3 className="text-xl font-bold text-slate-800 mb-2">No bookings found</h3>
-            <p className="text-slate-500 mb-8 max-w-sm mx-auto">Your upcoming and past care appointments will appear here once you make your first booking.</p>
-            <button onClick={() => setShowForm(true)} className="btn-primary px-10 py-3 shadow-lg shadow-primary-500/20">Book a Service</button>
+            <h3 className="text-xl font-black text-slate-800 tracking-tight italic uppercase">Log is Null</h3>
+            <p className="text-slate-400 text-sm font-medium mt-2 max-w-xs mx-auto">No previous or upcoming dispatches found in the system matrix.</p>
+            <button onClick={() => setShowForm(true)} className="btn-primary mt-10 px-10 py-4 text-[10px] font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-primary-500/20">Initialize Dispatch</button>
           </div>
         ) : (
           <div className="divide-y divide-slate-50">
             {appointments.map((appt, i) => (
               <motion.div key={appt._id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.05 }}
-                className="p-6 flex flex-col md:flex-row items-start md:items-center gap-6 hover:bg-slate-50/50 transition-all group">
-                <div className="w-16 h-16 rounded-2xl bg-white border border-slate-100 flex flex-col items-center justify-center shadow-soft flex-shrink-0 group-hover:border-primary-200 transition-colors">
-                  <span className="text-[10px] font-black text-slate-400 uppercase leading-none mb-1">{new Date(appt.date).toLocaleString('en', { month: 'short' })}</span>
-                  <span className="text-2xl font-black text-slate-800 leading-none">{new Date(appt.date).getDate()}</span>
+                className="p-8 flex flex-col md:flex-row items-start md:items-center gap-8 hover:bg-slate-50/50 transition-all group relative"
+              >
+                <div className="w-20 h-20 rounded-[2rem] bg-white border border-slate-100 flex flex-col items-center justify-center shadow-soft flex-shrink-0 group-hover:border-primary-200 transition-colors border-l-4" style={{ borderLeftColor: i % 2 === 0 ? '#6366f1' : '#f59e0b' }}>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{new Date(appt.date).toLocaleString('en', { month: 'short' })}</span>
+                  <span className="text-3xl font-black text-slate-900 leading-none">{new Date(appt.date).getDate()}</span>
                 </div>
                 
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-3 mb-1.5">
-                    <h3 className="font-bold text-slate-800 text-lg leading-none">{appt.serviceType}</h3>
-                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${statusStyles[appt.status] || 'bg-slate-100 text-slate-600'}`}>
+                  <div className="flex flex-wrap items-center gap-3 mb-2">
+                    <h3 className="font-black text-slate-900 text-xl tracking-tight leading-none italic uppercase">{appt.serviceType}</h3>
+                    <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-[0.2em] border ${statusStyles[appt.status] || 'bg-slate-100 text-slate-600'}`}>
                       {appt.status}
                     </span>
                   </div>
-                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-500">
-                    <span className="flex items-center gap-1.5 font-medium"><Clock className="w-3.5 h-3.5" /> {appt.time}</span>
-                    <span className="flex items-center gap-1.5 font-medium text-primary-600"><Footprints className="w-3.5 h-3.5" /> {appt.pet?.name || 'My Pet'}</span>
-                    <span className="flex items-center gap-1.5"><User className="w-3.5 h-3.5" /> {appt.provider || 'Assigned Professional'}</span>
+                  <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[11px] font-bold text-slate-400 uppercase tracking-tighter">
+                    <span className="flex items-center gap-2"><Clock className="w-4 h-4 text-primary-400" /> {appt.time}</span>
+                    <span className="flex items-center gap-2 text-primary-600"><Footprints className="w-4 h-4" /> {appt.pet?.name || 'System Pet'}</span>
+                    <span className="flex items-center gap-2"><User className="w-4 h-4 text-primary-400" /> {appt.provider || 'Assigned Professional'}</span>
+                    <span className="flex items-center gap-2"><Calendar className="w-4 h-4 text-primary-400" /> {formatApptDate(appt.date)}</span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 self-end md:self-center">
+                <div className="flex items-center gap-3 self-end md:self-center">
                   {appt.status === 'Pending' && (
-                    <button onClick={() => updateStatus(appt._id, 'Confirmed')} className="px-4 py-2 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-xl hover:bg-emerald-600 hover:text-white transition-all">
-                      Confirm
+                    <button onClick={() => updateStatus(appt._id, 'Confirmed')} className="px-6 py-2.5 bg-emerald-50 text-emerald-600 text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-emerald-600 hover:text-white transition-all shadow-sm">
+                      Validate
                     </button>
                   )}
                   {appt.status !== 'Completed' && appt.status !== 'Cancelled' && (
-                    <button onClick={() => updateStatus(appt._id, 'Completed')} className="p-2.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all" title="Mark as Completed">
-                      <CheckCircle className="w-5 h-5" />
+                    <button onClick={() => updateStatus(appt._id, 'Completed')} className="p-3 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all" title="Mark as Fulfilled">
+                      <CheckCircle className="w-6 h-6" />
                     </button>
                   )}
-                  <button onClick={() => deleteAppt(appt._id)} className="p-2.5 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all" title="Cancel Booking">
-                    <XCircle className="w-5 h-5" />
+                  <button onClick={() => deleteAppt(appt._id)} className="p-3 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all" title="Nullify Log">
+                    <XCircle className="w-6 h-6" />
                   </button>
                 </div>
               </motion.div>

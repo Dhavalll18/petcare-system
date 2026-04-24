@@ -10,10 +10,15 @@ const DashboardLayout = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="flex min-h-screen bg-slate-50/50">
       <Sidebar />
-      <main className="flex-1 ml-64 transition-all duration-300">
-        <div className="p-6 lg:p-8 max-w-7xl mx-auto">
+      {/* 
+          ml-0 on mobile because Sidebar is hidden/absolute
+          lg:ml-72 on desktop to make room for the fixed sidebar
+          pb-24 on mobile for the bottom navigation bar
+      */}
+      <main className="flex-1 lg:ml-72 transition-all duration-300 pb-24 lg:pb-0">
+        <div className="p-4 sm:p-6 lg:p-10 max-w-[1600px] mx-auto min-h-screen">
           <Outlet />
         </div>
       </main>

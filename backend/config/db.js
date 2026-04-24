@@ -4,24 +4,28 @@ let mongoServer;
 
 const connectDB = async () => {
     try {
-        // Use MONGODB_URI env var in production, else use in-memory for local dev
         const mongoUri = process.env.MONGODB_URI;
         
-        if (mongoUri && mongoUri !== 'your_mongodb_connection_string_here') {
-            const conn = await mongoose.connect(mongoUri);
-            console.log(`MongoDB Atlas Connected: ${conn.connection.host}`);
+        console.log('Attempting to connect to MongoDB...');
+        
+        if (mongoUri && mongoUri.includes('mongodb+srv')) {
+            // Using real MongoDB Atlas
+            await mongoose.connect(mongoUri, {
+                serverSelectionTimeoutMS: 5000 // 5 seconds timeout
+            });
+            console.log('✅ MongoDB Atlas Connected successfully!');
         } else {
-            // Fallback to in-memory MongoDB for local development
+            console.log('⚠️ No valid MONGODB_URI found, using in-memory fallback...');
             const { MongoMemoryServer } = require('mongodb-memory-server');
-            console.log('Starting In-Memory MongoDB for local development...');
-            mongoServer = await MongoMemoryServer.create({ instance: { startupTimeout: 60000 } });
+            mongoServer = await MongoMemoryServer.create();
             const memUri = mongoServer.getUri();
-            const conn = await mongoose.connect(memUri);
-            console.log(`In-Memory MongoDB Connected: ${conn.connection.host}`);
+            await mongoose.connect(memUri);
+            console.log('✅ In-Memory MongoDB Connected!');
         }
     } catch (error) {
-        console.error(`Database Error: ${error.message}`);
-        process.exit(1);
+        console.error('❌ Database Connection Error:', error.message);
+        console.log('Tip: Check your MongoDB Atlas IP Whitelist (add 0.0.0.0/0)');
+        // Don't exit process so server can still respond with error messages
     }
 };
 

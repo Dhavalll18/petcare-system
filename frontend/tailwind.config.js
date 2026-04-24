@@ -35,8 +35,18 @@ export default {
         'sidebar-hover': '#1e293b',
       },
       fontFamily: {
-        sans: ['Montserrat', 'system-ui', 'sans-serif'],
-        display: ['Montserrat', 'sans-serif'],
+        sans: ['Josefin Sans', 'system-ui', 'sans-serif'],
+        display: ['Josefin Sans', 'sans-serif'],
+      },
+      letterSpacing: {
+        tightest: '-.075em',
+        tighter: '-.05em',
+        tight: '-.025em',
+        normal: '0',
+        wide: '.025em',
+        wider: '.05em',
+        widest: '.2em',
+        premium: '.05em',
       },
       boxShadow: {
         'soft': '0 1px 3px 0 rgb(0 0 0 / 0.04), 0 1px 2px -1px rgb(0 0 0 / 0.04)',

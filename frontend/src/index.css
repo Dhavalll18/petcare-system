@@ -4,26 +4,26 @@
 
 @layer base {
   body {
-    @apply bg-[#fdfdfe] text-slate-800 antialiased font-sans selection:bg-primary-500/10 selection:text-primary-700;
+    @apply bg-[#fdfdfe] text-slate-800 antialiased font-sans selection:bg-primary-500/10 selection:text-primary-700 tracking-wide;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display tracking-tight text-slate-950 font-black;
+    @apply font-display tracking-widest text-slate-950 font-bold uppercase;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-primary-600 text-white font-black py-4 px-10 rounded-2xl
+    @apply bg-primary-600 text-white font-bold py-4 px-10 rounded-2xl
            transition-all duration-500 hover:bg-primary-700 hover:shadow-2xl hover:shadow-primary-600/30
            active:scale-[0.98] disabled:opacity-60
-           focus:outline-none focus:ring-4 focus:ring-primary-500/10 uppercase tracking-widest text-xs;
+           focus:outline-none focus:ring-4 focus:ring-primary-500/10 uppercase tracking-[0.3em] text-xs;
   }
 
   .btn-secondary {
-    @apply bg-white text-slate-900 font-black py-4 px-10 rounded-2xl border border-slate-200
+    @apply bg-white text-slate-900 font-bold py-4 px-10 rounded-2xl border border-slate-200
            transition-all duration-500 hover:bg-slate-50 hover:border-slate-300
-           focus:outline-none focus:ring-4 focus:ring-slate-500/10 uppercase tracking-widest text-xs;
+           focus:outline-none focus:ring-4 focus:ring-slate-500/10 uppercase tracking-[0.3em] text-xs;
   }
 
   .btn-danger {

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, X, CheckCircle, Trash2, ListChecks, Utensils, Activity, Stethoscope, Heart, Scissors, CalendarDays, AlertCircle, Clock, ChevronRight, Footprints } from 'lucide-react';
+import { Plus, X, CheckCircle, Trash2, ListChecks, Utensils, Activity, Stethoscope, Heart, Scissors, Clock, Footprints } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
 
@@ -52,13 +51,18 @@ const Tasks = () => {
   const fetchTasks = async () => {
     try { 
       const [taskRes, petRes] = await Promise.all([api.get('/tasks'), api.get('/pets')]);
-      setTasks(taskRes.data);
-      setPets(petRes.data);
-    } catch { /* silent */ }
+      setTasks(Array.isArray(taskRes.data) ? taskRes.data : []);
+      setPets(Array.isArray(petRes.data) ? petRes.data : []);
+    } catch { toast.error('Sync failure: Could not retrieve objectives'); setTasks([]); }
     finally { setLoading(false); }
   };
 
   useEffect(() => { fetchTasks(); }, []);
+
+  const safeTasks = Array.isArray(tasks) ? tasks : [];
+  const completed = safeTasks.filter(t => t.completed);
+  const pending = safeTasks.filter(t => !t.completed);
+  const progress = safeTasks.length > 0 ? (completed.length / safeTasks.length) * 100 : 0;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -92,10 +96,6 @@ const Tasks = () => {
     Medium: { color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-100' },
     Low: { color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-100' }
   };
-
-  const completed = tasks.filter(t => t.completed);
-  const pending = tasks.filter(t => !t.completed);
-  const progress = tasks.length > 0 ? (completed.length / tasks.length) * 100 : 0;
 
   return (
     <div className="max-w-6xl mx-auto space-y-10 animate-fade-in pb-20">

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
   Footprints, CalendarDays, ListChecks, TrendingUp, Plus, 
-  ArrowRight, Sparkles, Bell, Clock, 
-  ChevronRight, Settings, Activity
+  ArrowRight, Bell, Clock, 
+  ChevronRight, Settings
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import api from '../utils/api';
@@ -37,15 +37,24 @@ const Dashboard = () => {
           api.get('/appointments'),
           api.get('/tasks'),
         ]);
-        setPets(petsRes.data);
-        setAppointments(apptRes.data);
+        const petsData = Array.isArray(petsRes?.data) ? petsRes.data : [];
+        const apptData = Array.isArray(apptRes?.data) ? apptRes.data : [];
+        const taskData = Array.isArray(taskRes?.data) ? taskRes.data : [];
+        
+        setPets(petsData);
+        setAppointments(apptData);
         setStats({
-          pets: petsRes.data.length,
-          appointments: apptRes.data.length,
-          tasks: taskRes.data.filter(t => !t.completed).length,
+          pets: petsData.length,
+          appointments: apptData.length,
+          tasks: taskData.filter(t => !t.completed).length,
+          heartRate: 72,
+          activity: 85,
+          stress: 12
         });
       } catch (error) {
         console.error('Dashboard fetch error:', error);
+        setPets([]);
+        setAppointments([]);
       } finally {
         setLoading(false);
       }
@@ -53,7 +62,7 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
-  const nextAppt = appointments.find(a => a.status === 'Pending' || a.status === 'Confirmed');
+  const nextAppt = (Array.isArray(appointments) ? appointments : []).find(a => a?.status === 'Pending' || a?.status === 'Confirmed');
 
   return (
     <div className="space-y-10 pb-10">

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, X, CalendarDays, Clock, CheckCircle, AlertCircle, XCircle, User, Info, MapPin, Phone, Star, Footprints, ChevronRight } from 'lucide-react';
+import { Plus, X, CalendarDays, Clock, CheckCircle, XCircle, User, Info, MapPin, Phone, Star, Footprints } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
 
@@ -55,13 +55,19 @@ const Schedule = () => {
   const fetchData = async () => {
     try {
       const [apptRes, petRes] = await Promise.all([api.get('/appointments'), api.get('/pets')]);
-      setAppointments(apptRes.data);
-      setPets(petRes.data);
-    } catch { toast.error('Failed to load system data'); }
+      setAppointments(Array.isArray(apptRes.data) ? apptRes.data : []);
+      setPets(Array.isArray(petRes.data) ? petRes.data : []);
+    } catch { 
+      toast.error('Failed to load system data'); 
+      setAppointments([]);
+      setPets([]);
+    }
     finally { setLoading(false); }
   };
 
   useEffect(() => { fetchData(); }, []);
+
+  const safeAppts = Array.isArray(appointments) ? appointments : [];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -248,7 +254,7 @@ const Schedule = () => {
           </div>
         ) : (
           <div className="divide-y divide-slate-50">
-            {appointments.map((appt, i) => (
+            {safeAppts.map((appt, i) => (
               <motion.div key={appt._id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.05 }}
                 className="p-8 flex flex-col md:flex-row items-start md:items-center gap-8 hover:bg-slate-50/50 transition-all group relative"
               >

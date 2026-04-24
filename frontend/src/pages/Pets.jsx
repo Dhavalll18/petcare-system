@@ -23,12 +23,20 @@ const Pets = () => {
   const [form, setForm] = useState({ name: '', species: 'Dog', breed: '', age: '', weight: '', allergies: '' });
 
   const fetchPets = async () => {
-    try { const res = await api.get('/pets'); setPets(res.data); }
-    catch { toast.error('Data Sync Error: Failed to fetch profiles'); }
+    try { 
+      const res = await api.get('/pets'); 
+      setPets(Array.isArray(res.data) ? res.data : []); 
+    }
+    catch { 
+      toast.error('Data Sync Error: Failed to fetch profiles'); 
+      setPets([]);
+    }
     finally { setLoading(false); }
   };
 
   useEffect(() => { fetchPets(); }, []);
+
+  const safePets = Array.isArray(pets) ? pets : [];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -139,7 +147,7 @@ const Pets = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {pets.map((pet, i) => (
+          {(Array.isArray(pets) ? pets : []).map((pet, i) => (
             <motion.div key={pet._id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
               className="group relative bg-white rounded-[2.5rem] border border-slate-100 shadow-soft hover:shadow-elevated transition-all duration-500 overflow-hidden"
             >

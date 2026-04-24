@@ -68,10 +68,10 @@ const Pets = () => {
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
         <div>
            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-1">Biological Records</p>
-           <h1 className="text-4xl font-display font-black text-slate-900 tracking-tighter italic">
-             PET PROFILES<span className="text-primary-500 not-italic">.</span>
+           <h1 className="text-4xl font-display font-black text-slate-900 tracking-tighter uppercase">
+             Pet Profiles
            </h1>
-           <p className="text-slate-400 font-medium mt-1">Comprehensive biological and identification data matrix.</p>
+           <p className="text-slate-500 font-medium mt-1">Comprehensive biological and identification data matrix</p>
         </div>
         <button onClick={() => setShowForm(!showForm)} className="btn-primary flex items-center justify-center gap-2 px-10 py-4 text-[10px] font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-primary-500/20 active:scale-95 transition-all">
           {showForm ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}

@@ -115,7 +115,7 @@ const Tasks = () => {
               <span className="text-[10px] font-black text-primary-600 uppercase tracking-[0.3em] bg-primary-50 px-2 py-0.5 rounded-md border border-primary-100">Task Matrix</span>
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
            </div>
-           <h1 className="text-4xl font-display font-black text-slate-900 tracking-tighter">Objectives<span className="text-primary-500">.</span></h1>
+           <h1 className="text-4xl font-display font-black text-slate-900 tracking-tighter uppercase">Objectives</h1>
            <p className="text-slate-400 font-medium mt-1">Operationalize daily care and wellness routines.</p>
         </div>
         <button onClick={() => setShowForm(true)} className="btn-primary flex items-center justify-center gap-2 px-8 py-4 text-xs font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-primary-500/25">

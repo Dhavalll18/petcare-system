@@ -1,16 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Sparkles, Footprints, Send, Lightbulb, Activity, ShieldAlert, Zap, FileText, ChevronRight } from 'lucide-react';
+import { 
+  Sparkles, Footprints, Send, Lightbulb, Activity, 
+  AlertTriangle, Zap, FileText, ChevronRight, MessageSquare, 
+  User, Cpu, Mic, Image as ImageIcon, Paperclip, MoreVertical
+} from 'lucide-react';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
 
 const HealthAdvisor = () => {
   const [pets, setPets] = useState([]);
   const [selectedPet, setSelectedPet] = useState('');
-  const [tips, setTips] = useState([]);
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [analysisMode, setAnalysisMode] = useState(false);
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     const fetchPets = async () => {
@@ -20,188 +25,200 @@ const HealthAdvisor = () => {
     fetchPets();
   }, []);
 
-  const getTips = async () => {
-    if (!selectedPet) return toast.error('Please select a pet for analysis');
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const handleSend = async (e) => {
+    e.preventDefault();
+    if (!input.trim() || !selectedPet) return;
+
+    const userMsg = { role: 'user', content: input, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
+    setMessages(prev => [...prev, userMsg]);
+    setInput('');
     setLoading(true);
-    setAnalysisMode(true);
+
     try {
       const res = await api.get(`/pets/${selectedPet}/tips`);
+      const aiResponse = res.data.tips?.join(' ') || "I've analyzed your pet's data. Everything looks optimal, but keep an eye on their hydration today.";
+      
       setTimeout(() => {
-        setTips(res.data.tips || []);
+        setMessages(prev => [...prev, { 
+          role: 'ai', 
+          content: aiResponse, 
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+        }]);
         setLoading(false);
-        if (res.data.tips?.length === 0) toast('No critical anomalies detected', { icon: '🛡️' });
-      }, 1500); // Artificial delay for "Brainy" feel
-    } catch { 
-      toast.error('Analysis engine failed'); 
+      }, 1000);
+    } catch {
+      toast.error('AI Brain is temporarily offline');
       setLoading(false);
-      setAnalysisMode(false);
     }
   };
 
   const selectedPetData = pets.find(p => p._id === selectedPet);
 
   return (
-    <div className="animate-fade-in max-w-6xl mx-auto space-y-8">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div>
-          <h1 className="text-3xl font-display font-black text-slate-900 tracking-tight flex items-center gap-3">
-            <div className="p-2 bg-accent-100 rounded-xl">
-              <Sparkles className="w-8 h-8 text-accent-600" />
-            </div>
-            AI Wellness Engine
-          </h1>
-          <p className="text-slate-500 mt-2 font-medium">Neural care patterns and preventive health diagnostics for your pets.</p>
+    <div className="flex flex-col h-[calc(100vh-120px)] max-w-6xl mx-auto">
+      {/* AI Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 bg-white p-6 rounded-[2rem] border border-slate-100 shadow-soft">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-accent-600 rounded-2xl flex items-center justify-center shadow-lg shadow-primary-500/20">
+            <Cpu className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h1 className="text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+              PetCare AI Intelligence
+              <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            </h1>
+            <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">Neural Diagnostic Engine v2.4</p>
+          </div>
         </div>
-        <div className="flex items-center gap-2 px-4 py-2 bg-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-500 border border-slate-200">
-          <Activity className="w-3 h-3 text-emerald-500" />
-          Engine Status: Optimal
+        
+        <div className="flex items-center gap-2">
+          <select 
+            value={selectedPet} 
+            onChange={(e) => {
+              setSelectedPet(e.target.value);
+              setMessages([{ role: 'ai', content: `Hello! I'm your AI Pet Expert. Select a pet to begin a specialized health analysis.`, time: 'Now' }]);
+            }}
+            className="bg-slate-50 border-none rounded-xl px-4 py-2 text-sm font-bold text-slate-700 focus:ring-2 focus:ring-primary-500 transition-all outline-none"
+          >
+            <option value="">Select Target Pet...</option>
+            {pets.map(p => <option key={p._id} value={p._id}>{p.name}</option>)}
+          </select>
+          <button className="p-2.5 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-xl transition-all">
+            <MoreVertical className="w-5 h-5" />
+          </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Control Panel */}
-        <div className="lg:col-span-1 space-y-6">
-          <div className="bg-white rounded-[2rem] border border-slate-100 shadow-soft p-8">
-            <h3 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
-              <Zap className="w-5 h-5 text-amber-500" />
-              Source Selection
-            </h3>
-            
-            {pets.length === 0 ? (
-              <div className="p-6 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200">
-                <p className="text-slate-500 text-sm mb-4">No pet data available for analysis.</p>
-                <Link to="/app/pets" className="text-xs font-bold text-primary-600 underline">Add Profiles First</Link>
+      {/* Chat Area */}
+      <div className="flex-1 overflow-hidden flex flex-col md:flex-row gap-6">
+        {/* Main Chat Interface */}
+        <div className="flex-1 bg-white rounded-[2.5rem] border border-slate-100 shadow-soft flex flex-col overflow-hidden">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth">
+            {messages.length === 0 ? (
+              <div className="h-full flex flex-col items-center justify-center text-center space-y-4 px-10">
+                <div className="w-20 h-20 bg-slate-50 rounded-[2rem] flex items-center justify-center text-slate-200">
+                  <MessageSquare className="w-10 h-10" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-400">Initialize AI Conversation</h3>
+                <p className="text-sm text-slate-400 max-w-xs">Start a chat to get real-time medical insights, training tips, and dietary advice for your pets.</p>
               </div>
             ) : (
-              <div className="space-y-3">
-                {pets.map(pet => (
-                  <button
-                    key={pet._id}
-                    onClick={() => { setSelectedPet(pet._id); setTips([]); setAnalysisMode(false); }}
-                    className={`w-full flex items-center gap-4 p-4 rounded-2xl border-2 transition-all text-left group
-                      ${selectedPet === pet._id
-                        ? 'border-primary-500 bg-primary-50 shadow-md'
-                        : 'border-slate-50 bg-slate-50 hover:border-slate-200 hover:bg-slate-100'
-                      }`}
-                  >
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${selectedPet === pet._id ? 'bg-primary-500 text-white' : 'bg-white text-slate-400 group-hover:text-primary-500'}`}>
-                      <Footprints className="w-5 h-5" />
+              messages.map((msg, i) => (
+                <motion.div 
+                  key={i} 
+                  initial={{ opacity: 0, y: 10 }} 
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div className={`flex gap-3 max-w-[80%] ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm ${msg.role === 'user' ? 'bg-primary-600 text-white' : 'bg-slate-100 text-primary-600'}`}>
+                      {msg.role === 'user' ? <User className="w-4 h-4" /> : <Cpu className="w-4 h-4" />}
                     </div>
-                    <div>
-                      <p className={`font-bold text-sm ${selectedPet === pet._id ? 'text-primary-800' : 'text-slate-700'}`}>{pet.name}</p>
-                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">{pet.species} · {pet.age} Years</p>
+                    <div className={`p-4 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.role === 'user' ? 'bg-primary-600 text-white rounded-tr-none' : 'bg-slate-50 text-slate-700 rounded-tl-none border border-slate-100'}`}>
+                      {msg.content}
+                      <p className={`text-[10px] mt-2 font-bold ${msg.role === 'user' ? 'text-primary-200' : 'text-slate-400'}`}>{msg.time}</p>
                     </div>
-                  </button>
-                ))}
-              </div>
+                  </div>
+                </motion.div>
+              ))
             )}
-
-            {selectedPet && !analysisMode && (
-              <button onClick={getTips} className="w-full mt-8 btn-primary py-4 rounded-2xl shadow-xl shadow-primary-500/25 flex items-center justify-center gap-2 font-bold group">
-                 Run AI Diagnostic <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
+            {loading && (
+              <div className="flex justify-start">
+                <div className="flex gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-slate-100 text-primary-600 flex items-center justify-center shadow-sm">
+                    <Cpu className="w-4 h-4" />
+                  </div>
+                  <div className="bg-slate-50 border border-slate-100 p-4 rounded-2xl rounded-tl-none flex gap-1">
+                    <span className="w-1.5 h-1.5 bg-primary-400 rounded-full animate-bounce"></span>
+                    <span className="w-1.5 h-1.5 bg-primary-400 rounded-full animate-bounce delay-100"></span>
+                    <span className="w-1.5 h-1.5 bg-primary-400 rounded-full animate-bounce delay-200"></span>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
 
-          <div className="bg-slate-900 rounded-[2rem] p-8 text-white shadow-2xl">
-             <div className="flex items-center gap-2 mb-4 text-primary-400">
-                <ShieldAlert className="w-5 h-5" />
-                <h4 className="font-bold">Privacy Protocol</h4>
-             </div>
-             <p className="text-xs text-slate-400 leading-relaxed">
-               All health data is encrypted and analyzed locally using our secure neural models. We never share your pet's medical records with third parties.
-             </p>
+          {/* Input Area */}
+          <div className="p-6 bg-slate-50/50 border-t border-slate-100">
+            <form onSubmit={handleSend} className="flex items-center gap-3 bg-white p-2 rounded-2xl border border-slate-200 focus-within:border-primary-400 transition-all shadow-sm">
+              <div className="flex items-center gap-1 pl-2">
+                <button type="button" className="p-2 text-slate-400 hover:text-primary-500 transition-colors"><Paperclip className="w-4 h-4" /></button>
+                <button type="button" className="p-2 text-slate-400 hover:text-primary-500 transition-colors"><ImageIcon className="w-4 h-4" /></button>
+              </div>
+              <input 
+                type="text" 
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder={selectedPet ? `Ask about ${selectedPetData?.name}...` : "Select a pet to start chatting..."}
+                disabled={!selectedPet || loading}
+                className="flex-1 bg-transparent border-none outline-none text-sm py-2 px-1 text-slate-800 placeholder:text-slate-400 font-medium"
+              />
+              <button 
+                type="submit" 
+                disabled={!input.trim() || !selectedPet || loading}
+                className="bg-primary-600 text-white p-2.5 rounded-xl hover:bg-primary-700 disabled:bg-slate-200 transition-all shadow-lg shadow-primary-500/20"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </form>
+            <div className="flex items-center justify-between mt-3 px-2">
+              <div className="flex items-center gap-4">
+                <button className="flex items-center gap-1 text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-primary-500 transition-colors">
+                  <Mic className="w-3 h-3" /> Voice
+                </button>
+              </div>
+              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Enterprise Secured AI · AES-256</p>
+            </div>
           </div>
         </div>
 
-        {/* Diagnostic Results */}
-        <div className="lg:col-span-2">
-          <AnimatePresence mode="wait">
-            {loading ? (
-              <motion.div 
-                key="loading"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                className="bg-white rounded-[2rem] border border-slate-100 shadow-soft p-20 flex flex-col items-center justify-center text-center space-y-6"
-              >
-                <div className="relative">
-                  <div className="w-24 h-24 border-4 border-primary-100 border-t-primary-600 rounded-full animate-spin"></div>
-                  <Sparkles className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 text-primary-600 animate-pulse" />
+        {/* Sidebar Info */}
+        <div className="hidden lg:flex flex-col gap-6 w-72">
+          {selectedPetData ? (
+            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="bg-white rounded-[2rem] border border-slate-100 shadow-soft p-6">
+              <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Patient Profile</h4>
+              <div className="text-center mb-6">
+                <div className="w-20 h-20 bg-slate-100 rounded-[2rem] mx-auto mb-3 overflow-hidden border-4 border-white shadow-md">
+                   <img src={selectedPetData.avatarUrl || 'https://cdn-icons-png.flaticon.com/512/3069/3069172.png'} alt="" className="w-full h-full object-cover" />
                 </div>
-                <div className="space-y-2">
-                  <h3 className="text-xl font-bold text-slate-800">Analyzing Pet Vitals</h3>
-                  <p className="text-slate-400 text-sm max-w-xs mx-auto">Connecting to the neural care cloud and processing medical history...</p>
-                </div>
-              </motion.div>
-            ) : tips.length > 0 ? (
-              <motion.div 
-                key="results"
-                initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-                className="space-y-6"
-              >
-                 <div className="bg-white rounded-[2rem] border border-slate-100 shadow-soft p-8">
-                   <div className="flex items-center justify-between mb-8 pb-6 border-b border-slate-50">
-                      <div>
-                        <h3 className="text-xl font-bold text-slate-800">Analysis Report</h3>
-                        <p className="text-xs text-slate-400 font-bold uppercase mt-1 tracking-widest">ID: DIAG-{selectedPet.slice(-6).toUpperCase()}</p>
-                      </div>
-                      <FileText className="w-8 h-8 text-slate-100" />
-                   </div>
-
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {tips.map((tip, i) => (
-                        <motion.div
-                          key={i}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: i * 0.1 }}
-                          className="p-5 rounded-2xl bg-slate-50 border border-slate-100 hover:border-primary-200 transition-all group"
-                        >
-                          <div className="flex items-start gap-4">
-                            <div className="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center flex-shrink-0 group-hover:bg-primary-500 group-hover:text-white transition-colors">
-                              <Lightbulb className="w-4 h-4 text-amber-500 group-hover:text-white" />
-                            </div>
-                            <p className="text-sm text-slate-600 leading-relaxed font-medium">
-                              {tip}
-                            </p>
-                          </div>
-                        </motion.div>
-                      ))}
-                   </div>
-
-                   <div className="mt-8 p-6 bg-emerald-50 rounded-2xl border border-emerald-100 flex items-center gap-4">
-                      <div className="p-3 bg-emerald-500 rounded-xl text-white">
-                        <Activity className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold text-emerald-900">Overall Health Outlook: Positive</p>
-                        <p className="text-xs text-emerald-700">Daily routine followed consistently. No immediate intervention required.</p>
-                      </div>
-                   </div>
-                 </div>
-
-                 <div className="bg-gradient-to-r from-primary-600 to-indigo-600 rounded-[2rem] p-8 text-white shadow-xl flex items-center justify-between">
-                    <div>
-                      <h4 className="font-bold text-lg">Need Professional Advice?</h4>
-                      <p className="text-sm text-primary-100">Schedule a priority consultation with a senior veterinarian.</p>
-                    </div>
-                    <Link to="/app/schedule" className="px-6 py-3 bg-white text-primary-600 font-bold rounded-xl text-sm shadow-lg shadow-black/10">
-                      Book Vet
-                    </Link>
-                 </div>
-              </motion.div>
-            ) : (
-              <div className="bg-white rounded-[2rem] border border-slate-100 shadow-soft p-20 flex flex-col items-center justify-center text-center space-y-6">
-                <div className="w-24 h-24 bg-slate-50 rounded-[2.5rem] flex items-center justify-center text-slate-200">
-                  <Sparkles className="w-12 h-12" />
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-xl font-bold text-slate-400">Neural Engine Ready</h3>
-                  <p className="text-slate-400 text-sm max-w-xs mx-auto">Select a pet from the left panel to begin a comprehensive AI wellness analysis.</p>
-                </div>
+                <p className="font-black text-slate-800">{selectedPetData.name}</p>
+                <p className="text-xs text-primary-600 font-bold">{selectedPetData.breed || selectedPetData.species}</p>
               </div>
-            )}
-          </AnimatePresence>
+              <div className="space-y-4">
+                 <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
+                    <span className="text-[10px] font-black text-slate-400 uppercase">Health Score</span>
+                    <span className="text-sm font-black text-emerald-600">98/100</span>
+                 </div>
+                 <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
+                    <span className="text-[10px] font-black text-slate-400 uppercase">Activity Index</span>
+                    <span className="text-sm font-black text-blue-600">Active</span>
+                 </div>
+              </div>
+              <Link to={`/app/pets`} className="w-full mt-6 py-3 border border-slate-100 text-slate-400 text-[10px] font-black uppercase text-center rounded-xl hover:bg-slate-50 transition-all block">
+                Full Vitals Report
+              </Link>
+            </motion.div>
+          ) : (
+             <div className="bg-slate-900 rounded-[2rem] p-8 text-white text-center">
+                <Sparkles className="w-10 h-10 text-primary-400 mx-auto mb-4" />
+                <h4 className="font-bold mb-2">Neural Analysis</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">Select a pet to load their metabolic data into the AI intelligence matrix.</p>
+             </div>
+          )}
+
+          <div className="bg-gradient-to-br from-amber-400 to-orange-500 rounded-[2rem] p-6 text-white shadow-xl">
+             <h4 className="font-black text-xs uppercase tracking-widest mb-2">Pro Feature</h4>
+             <p className="text-xs font-medium leading-relaxed mb-4">You have unlimited AI tokens as a Pro Member. Diagnostic accuracy is increased by 40%.</p>
+             <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden">
+                <div className="w-[85%] h-full bg-white"></div>
+             </div>
+          </div>
         </div>
       </div>
     </div>

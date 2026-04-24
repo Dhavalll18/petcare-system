@@ -23,6 +23,14 @@ const taskSchema = new mongoose.Schema({
         enum: ['High', 'Medium', 'Low'],
         default: 'Medium'
     },
+    category: {
+        type: String,
+        enum: ['Food', 'Health', 'Exercise', 'Grooming', 'Other'],
+        default: 'Other'
+    },
+    dueDate: {
+        type: Date
+    },
     completed: {
         type: Boolean,
         default: false

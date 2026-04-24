@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, X, CalendarDays, Clock, CheckCircle, AlertCircle, XCircle, User, Info, MapPin, Phone, Star, Circle, Footprints, ChevronRight, Calendar } from 'lucide-react';
+import { Plus, X, CalendarDays, Clock, CheckCircle, AlertCircle, XCircle, User, Info, MapPin, Phone, Star, Footprints, ChevronRight } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
 
@@ -124,7 +124,7 @@ const Schedule = () => {
                 <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-full blur-3xl -mr-32 -mt-32"></div>
                 
                 <h3 className="text-xl font-black text-slate-900 mb-10 tracking-tight flex items-center gap-3 relative z-10 italic">
-                  <Calendar className="w-6 h-6 text-primary-500 not-italic" />
+                  <CalendarDays className="w-6 h-6 text-primary-500 not-italic" />
                   RESERVATION PARAMETERS
                 </h3>
                 
@@ -268,7 +268,7 @@ const Schedule = () => {
                     <span className="flex items-center gap-2"><Clock className="w-4 h-4 text-primary-400" /> {appt.time}</span>
                     <span className="flex items-center gap-2 text-primary-600"><Footprints className="w-4 h-4" /> {appt.pet?.name || 'System Pet'}</span>
                     <span className="flex items-center gap-2"><User className="w-4 h-4 text-primary-400" /> {appt.provider || 'Assigned Professional'}</span>
-                    <span className="flex items-center gap-2"><Calendar className="w-4 h-4 text-primary-400" /> {formatApptDate(appt.date)}</span>
+                    <span className="flex items-center gap-2"><CalendarDays className="w-4 h-4 text-primary-400" /> {formatApptDate(appt.date)}</span>
                   </div>
                 </div>
 

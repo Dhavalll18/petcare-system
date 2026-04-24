@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Footprints, CalendarDays, ListChecks, TrendingUp, Plus, 
   ArrowRight, Sparkles, Bell, Clock, 
-  ChevronRight, Settings, Calendar, Activity
+  ChevronRight, Settings, Activity
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import api from '../utils/api';
@@ -105,7 +105,7 @@ const Dashboard = () => {
                  {nextAppt && (
                    <div className="flex flex-wrap gap-4">
                       <div className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
-                         <Calendar className="w-4 h-4 text-primary-500" />
+                         <CalendarDays className="w-4 h-4 text-primary-500" />
                          <span className="text-xs font-bold text-slate-700">{formatDate(nextAppt.date)}</span>
                       </div>
                       <div className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
@@ -222,7 +222,7 @@ const Dashboard = () => {
                <div className="space-y-4">
                   {[
                     { label: 'Service Center', path: '/app/services', icon: Heart },
-                    { label: 'Booking Desk', path: '/app/schedule', icon: Calendar },
+                    { label: 'Booking Desk', path: '/app/schedule', icon: CalendarDays },
                     { label: 'Action List', path: '/app/tasks', icon: ListChecks },
                   ].map(link => (
                     <Link key={link.label} to={link.path} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl group hover:bg-primary-50 transition-all">

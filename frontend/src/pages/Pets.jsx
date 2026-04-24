@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { Plus, X, Trash2, Activity, AlertTriangle, ChevronRight, Info, Heart, Footprints } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';

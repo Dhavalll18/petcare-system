@@ -18,6 +18,7 @@ import SettingsPage from './pages/Settings';
 // Public layout
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import Services from './components/Services';
 
 function PublicLayout({ children }) {
   return (

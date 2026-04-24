@@ -39,7 +39,7 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Outfit', 'sans-serif'],
+        display: ['Manrope', 'sans-serif'],
       },
       boxShadow: {
         'soft': '0 1px 3px 0 rgb(0 0 0 / 0.04), 0 1px 2px -1px rgb(0 0 0 / 0.04)',

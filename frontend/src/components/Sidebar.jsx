@@ -99,7 +99,7 @@ const Sidebar = () => {
           {!collapsed && user && (
             <div className="mb-4 p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-400 to-indigo-500 flex items-center justify-center text-white font-black text-sm">
-                {user.name?.charAt(0).toUpperCase()}
+                {(user.name?.charAt(0) || 'U').toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-white text-xs font-black truncate uppercase tracking-widest leading-none">{user.name}</p>

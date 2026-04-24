@@ -1,7 +1,15 @@
 import { create } from 'zustand';
 
 const useAuthStore = create((set) => ({
-  user: JSON.parse(localStorage.getItem('petcare_user')) || null,
+  user: (() => {
+    try {
+      const stored = localStorage.getItem('petcare_user');
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      localStorage.removeItem('petcare_user');
+      return null;
+    }
+  })(),
   token: localStorage.getItem('petcare_token') || null,
   
   login: (userData, token) => {

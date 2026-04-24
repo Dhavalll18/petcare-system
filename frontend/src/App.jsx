@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import ErrorBoundary from './components/ErrorBoundary';
 
 // Public pages
 import Home from './pages/Home';
@@ -40,23 +41,25 @@ function App() {
           style: { borderRadius: '12px', background: '#1e293b', color: '#fff', fontSize: '14px' },
         }}
       />
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
-        <Route path="/login" element={<PublicLayout><Login /></PublicLayout>} />
-        <Route path="/register" element={<PublicLayout><Register /></PublicLayout>} />
+      <ErrorBoundary>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
+          <Route path="/login" element={<PublicLayout><Login /></PublicLayout>} />
+          <Route path="/register" element={<PublicLayout><Register /></PublicLayout>} />
 
-        {/* Protected SaaS Routes */}
-        <Route path="/app" element={<DashboardLayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="pets" element={<Pets />} />
-          <Route path="services" element={<Services />} />
-          <Route path="schedule" element={<Schedule />} />
-          <Route path="tasks" element={<Tasks />} />
-          <Route path="health" element={<HealthAdvisor />} />
-          <Route path="settings" element={<SettingsPage />} />
-        </Route>
-      </Routes>
+          {/* Protected SaaS Routes */}
+          <Route path="/app" element={<DashboardLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="pets" element={<Pets />} />
+            <Route path="services" element={<Services />} />
+            <Route path="schedule" element={<Schedule />} />
+            <Route path="tasks" element={<Tasks />} />
+            <Route path="health" element={<HealthAdvisor />} />
+            <Route path="settings" element={<SettingsPage />} />
+          </Route>
+        </Routes>
+      </ErrorBoundary>
     </>
   );
 }

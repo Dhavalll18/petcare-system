@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Home, Footprints, CalendarDays, ListChecks, Settings, LogOut, Heart, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+import { Home, Footprints, CalendarDays, ListChecks, Settings, LogOut, Heart, ChevronLeft, ChevronRight, Sparkles, PawPrint } from 'lucide-react';
 import { useState } from 'react';
 import useAuthStore from '../store/authStore';
 

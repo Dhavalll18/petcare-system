@@ -19,42 +19,39 @@ const Hero = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            {/* Enterprise Badge */}
-            <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-2xl px-6 py-2 mb-10 shadow-2xl">
-              <div className="flex -space-x-2">
-                 {[1,2,3].map(i => <div key={i} className="w-6 h-6 rounded-full border-2 border-slate-900 bg-primary-500"></div>)}
-              </div>
-              <span className="text-[10px] text-white font-black uppercase tracking-[0.3em]">
-                Complete Pet Management Platform
+            {/* Management Badge */}
+            <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-2xl px-6 py-2.5 mb-12 shadow-2xl">
+              <span className="w-2 h-2 rounded-full bg-primary-500 animate-pulse"></span>
+              <span className="text-[10px] text-white font-black uppercase tracking-[0.5em]">
+                Enterprise Management Interface
               </span>
-              <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
             </div>
 
-            <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-display font-black text-white leading-[0.9] tracking-tighter mb-8">
-              PREMIUM CARE<br />
-              <span className="text-primary-500">REDEFINED</span>
+            <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-[10rem] font-display font-black text-white leading-[0.85] tracking-tighter mb-10">
+              PETCARE<br />
+              <span className="text-primary-500">SYSTEM</span>
             </h1>
 
-            <p className="text-lg md:text-2xl text-slate-400 mb-12 max-w-3xl mx-auto font-medium leading-relaxed">
-              "The most comprehensive ecosystem for tracking health, managing appointments, and ensuring a better life for your furry companions."
+            <p className="text-lg md:text-2xl text-slate-400 mb-16 max-w-4xl mx-auto font-medium leading-relaxed">
+              The world's most sophisticated platform for tracking health metrics, managing medical records, and optimizing care for elite pet companions.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <Link
                 to="/register"
-                className="group bg-primary-600 text-white font-black py-5 px-12 rounded-2xl
-                         hover:bg-primary-500 transition-all duration-500 shadow-2xl shadow-primary-600/30
-                         flex items-center gap-3 text-sm uppercase tracking-widest"
+                className="group bg-primary-600 text-white font-black py-6 px-16 rounded-[2rem]
+                         hover:bg-primary-700 transition-all duration-500 shadow-2xl shadow-primary-600/40
+                         flex items-center gap-4 text-xs uppercase tracking-[0.3em]"
               >
-                Get Started Free
+                Launch System
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
               </Link>
               <Link
                 to="/login"
-                className="bg-white/5 text-white font-black py-5 px-12 rounded-2xl border border-white/10
-                         hover:bg-white/10 hover:border-white/20 transition-all duration-500 flex items-center gap-3 text-sm uppercase tracking-widest"
+                className="bg-white/5 text-white font-black py-6 px-16 rounded-[2rem] border border-white/10
+                         hover:bg-white/10 hover:border-white/20 transition-all duration-500 flex items-center gap-4 text-xs uppercase tracking-[0.3em]"
               >
-                Live Demo
+                Access Portal
               </Link>
             </div>
           </motion.div>

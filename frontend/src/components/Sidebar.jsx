@@ -1,11 +1,11 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, PawPrint, CalendarDays, ListChecks, Settings, LogOut, Heart, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+import { LayoutDashboard, Footprints, CalendarDays, ListChecks, Settings, LogOut, Heart, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import useAuthStore from '../store/authStore';
 
 const menuItems = [
   { label: 'Dashboard', icon: LayoutDashboard, path: '/app' },
-  { label: 'My Pets', icon: PawPrint, path: '/app/pets' },
+  { label: 'My Pets', icon: Footprints, path: '/app/pets' },
   { label: 'Services', icon: Heart, path: '/app/services' },
   { label: 'Schedule', icon: CalendarDays, path: '/app/schedule' },
   { label: 'Tasks', icon: ListChecks, path: '/app/tasks' },

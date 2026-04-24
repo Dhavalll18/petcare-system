@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, X, CalendarDays, Clock, CheckCircle2, AlertCircle, XCircle, User, Info, MapPin, Phone, Star, Circle, PawPrint } from 'lucide-react';
+import { Plus, X, CalendarDays, Clock, CheckCircle, AlertCircle, XCircle, User, Info, MapPin, Phone, Star, Circle, Footprints } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
 
@@ -240,7 +240,7 @@ const Schedule = () => {
                   </div>
                   <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-500">
                     <span className="flex items-center gap-1.5 font-medium"><Clock className="w-3.5 h-3.5" /> {appt.time}</span>
-                    <span className="flex items-center gap-1.5 font-medium text-primary-600"><PawPrint className="w-3.5 h-3.5" /> {appt.pet?.name || 'My Pet'}</span>
+                    <span className="flex items-center gap-1.5 font-medium text-primary-600"><Footprints className="w-3.5 h-3.5" /> {appt.pet?.name || 'My Pet'}</span>
                     <span className="flex items-center gap-1.5"><User className="w-3.5 h-3.5" /> {appt.provider || 'Assigned Professional'}</span>
                   </div>
                 </div>
@@ -253,7 +253,7 @@ const Schedule = () => {
                   )}
                   {appt.status !== 'Completed' && appt.status !== 'Cancelled' && (
                     <button onClick={() => updateStatus(appt._id, 'Completed')} className="p-2.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all" title="Mark as Completed">
-                      <CheckCircle2 className="w-5 h-5" />
+                      <CheckCircle className="w-5 h-5" />
                     </button>
                   )}
                   <button onClick={() => deleteAppt(appt._id)} className="p-2.5 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all" title="Cancel Booking">

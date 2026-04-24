@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { PawPrint, CalendarDays, ListChecks, TrendingUp, Plus, ArrowRight, Sparkles } from 'lucide-react';
+import { Footprints, CalendarDays, ListChecks, TrendingUp, Plus, ArrowRight, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import api from '../utils/api';
 import useAuthStore from '../store/authStore';
@@ -46,7 +46,7 @@ const Dashboard = () => {
   }, []);
 
   const statCards = [
-    { label: 'My Pets', value: stats.pets, icon: PawPrint, color: 'from-primary-500 to-primary-600', bg: 'bg-primary-50', link: '/app/pets' },
+    { label: 'My Pets', value: stats.pets, icon: Footprints, color: 'from-primary-500 to-primary-600', bg: 'bg-primary-50', link: '/app/pets' },
     { label: 'Appointments', value: stats.appointments, icon: CalendarDays, color: 'from-amber-500 to-orange-500', bg: 'bg-amber-50', link: '/app/schedule' },
     { label: 'Active Tasks', value: stats.tasks, icon: ListChecks, color: 'from-emerald-500 to-teal-500', bg: 'bg-emerald-50', link: '/app/tasks' },
     { label: 'Health Score', value: '98%', icon: TrendingUp, color: 'from-violet-500 to-purple-500', bg: 'bg-violet-50', link: '/app/pets' },
@@ -129,7 +129,7 @@ const Dashboard = () => {
               ) : pets.length === 0 ? (
                 <div className="text-center py-8">
                   <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <PawPrint className="w-8 h-8 text-slate-400" />
+                    <Footprints className="w-8 h-8 text-slate-400" />
                   </div>
                   <p className="text-slate-500 mb-4">No pets added yet</p>
                   <Link to="/app/pets" className="btn-primary text-sm py-2 inline-flex items-center gap-2">

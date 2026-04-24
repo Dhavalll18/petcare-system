@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { 
   Footprints, CalendarDays, ListChecks, TrendingUp, Plus, 
   ArrowRight, Bell, Clock, 
-  ChevronRight, Settings, Sparkles
+  ChevronRight, Settings, Sparkles, Heart
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import api from '../utils/api';

@@ -4,10 +4,12 @@ import { Plus, X, CheckCircle, Trash2, ListChecks, Utensils, Activity, Stethosco
 import toast from 'react-hot-toast';
 import api from '../utils/api';
 
-// Professional Date Formatter
+// Professional Date Formatter (Crash-Proof)
 const formatTaskDate = (dateString) => {
   if (!dateString) return 'No due date';
   const date = new Date(dateString);
+  if (isNaN(date.getTime())) return 'Invalid Date';
+  
   const now = new Date();
   now.setHours(0,0,0,0);
   const checkDate = new Date(date);
@@ -22,7 +24,11 @@ const formatTaskDate = (dateString) => {
   if (diffDays < 0) return `${Math.abs(diffDays)} days ago`;
   if (diffDays < 7) return `in ${diffDays} days`;
   
-  return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date);
+  try {
+    return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date);
+  } catch {
+    return date.toLocaleDateString();
+  }
 };
 
 const Tasks = () => {
@@ -53,16 +59,19 @@ const Tasks = () => {
       const [taskRes, petRes] = await Promise.all([api.get('/tasks'), api.get('/pets')]);
       setTasks(Array.isArray(taskRes.data) ? taskRes.data : []);
       setPets(Array.isArray(petRes.data) ? petRes.data : []);
-    } catch { toast.error('Sync failure: Could not retrieve objectives'); setTasks([]); }
+    } catch { 
+      toast.error('Sync failure: Could not retrieve objectives'); 
+      setTasks([]);
+    }
     finally { setLoading(false); }
   };
 
   useEffect(() => { fetchTasks(); }, []);
 
   const safeTasks = Array.isArray(tasks) ? tasks : [];
-  const completed = safeTasks.filter(t => t.completed);
-  const pending = safeTasks.filter(t => !t.completed);
-  const progress = safeTasks.length > 0 ? (completed.length / safeTasks.length) * 100 : 0;
+  const completedTasks = safeTasks.filter(t => t.completed);
+  const pendingTasks = safeTasks.filter(t => !t.completed);
+  const progress = safeTasks.length > 0 ? (completedTasks.length / safeTasks.length) * 100 : 0;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -103,34 +112,35 @@ const Tasks = () => {
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
         <div>
            <div className="flex items-center gap-2 mb-1">
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Operational Objectives</span>
+              <span className="text-[10px] font-black text-primary-600 uppercase tracking-[0.3em] bg-primary-50 px-2 py-0.5 rounded-md border border-primary-100">Task Matrix</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
            </div>
-           <h1 className="text-4xl font-display font-black text-slate-900 tracking-tighter">
-             Tasks<span className="text-primary-500">.</span>
-           </h1>
-           <p className="text-slate-400 font-medium mt-1">Daily pet care checklist and priority management.</p>
+           <h1 className="text-4xl font-display font-black text-slate-900 tracking-tighter">Objectives<span className="text-primary-500">.</span></h1>
+           <p className="text-slate-400 font-medium mt-1">Operationalize daily care and wellness routines.</p>
         </div>
-        <button onClick={() => setShowForm(!showForm)} className="btn-primary flex items-center justify-center gap-2 px-8 py-4 text-[10px] font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-primary-500/20">
-          {showForm ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-          {showForm ? 'Abort Entry' : 'Create New Task'}
+        <button onClick={() => setShowForm(true)} className="btn-primary flex items-center justify-center gap-2 px-8 py-4 text-xs font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-primary-500/25">
+           <Plus className="w-4 h-4" /> Initialize Task
         </button>
       </div>
 
-      {/* Progress & Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-         <div className="md:col-span-2 bg-white rounded-[2rem] border border-slate-100 p-8 shadow-soft">
-            <div className="flex items-center justify-between mb-4">
-               <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Overall Completion Index</span>
-               <span className="text-lg font-black text-primary-600">{Math.round(progress)}%</span>
+      {/* Hero Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+         <div className="md:col-span-2 bg-white rounded-[2.5rem] border border-slate-100 p-8 shadow-soft flex flex-col justify-between">
+            <div>
+               <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest">Completion Index</h3>
+                  <span className="text-2xl font-black text-primary-600">{Math.round(progress)}%</span>
+               </div>
+               <div className="h-4 bg-slate-50 rounded-full overflow-hidden border border-slate-100">
+                  <motion.div initial={{ width: 0 }} animate={{ width: `${progress}%` }} transition={{ duration: 1 }} className="h-full bg-gradient-to-r from-primary-500 to-indigo-600" />
+               </div>
             </div>
-            <div className="h-3 bg-slate-50 rounded-full overflow-hidden border border-slate-100">
-               <motion.div initial={{ width: 0 }} animate={{ width: `${progress}%` }} className="h-full bg-gradient-to-r from-primary-500 to-indigo-600" />
-            </div>
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-6">System Efficiency: Optimal</p>
          </div>
-         <div className="bg-slate-900 rounded-[2rem] p-8 text-white flex items-center justify-between shadow-xl">
+         <div className="bg-slate-900 rounded-[2.5rem] p-8 text-white flex items-center justify-between shadow-xl">
             <div>
                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Active Tasks</p>
-               <p className="text-3xl font-black">{pending.length}</p>
+               <p className="text-3xl font-black">{pendingTasks.length}</p>
             </div>
             <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center">
                <ListChecks className="w-6 h-6 text-primary-400" />
@@ -138,45 +148,47 @@ const Tasks = () => {
          </div>
       </div>
 
+      {/* Add Task Form */}
       <AnimatePresence>
         {showForm && (
-          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-            <form onSubmit={handleSubmit} className="bg-white rounded-[2.5rem] border border-slate-100 shadow-elevated p-8 sm:p-12">
-              <h3 className="text-xl font-black text-slate-900 mb-8 tracking-tight italic uppercase">Manual Task Entry</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2">
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Objective Title *</label>
-                  <input type="text" value={form.title} onChange={e => setForm({...form, title: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent focus:border-primary-500 focus:bg-white rounded-2xl p-4 text-sm font-bold transition-all outline-none" placeholder="e.g. Afternoon hydration protocol" />
+          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
+            className="bg-white rounded-[2.5rem] border-2 border-primary-100 p-8 sm:p-12 shadow-2xl relative overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-50 rounded-full blur-3xl -mr-32 -mt-32"></div>
+            <h3 className="text-2xl font-black text-slate-900 mb-8 tracking-tight flex items-center gap-3 relative z-10">
+               <Plus className="w-6 h-6 text-primary-500" />
+               DEFINE OBJECTIVE
+            </h3>
+            <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Task Title</label>
+                  <input type="text" placeholder="e.g., Morning Nutritional Load" className="input-field py-4 text-sm font-bold" value={form.title} onChange={e => setForm({...form, title: e.target.value})} />
                 </div>
-                <div>
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Target Profile</label>
-                  <select value={form.pet} onChange={e => setForm({...form, pet: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent focus:border-primary-500 focus:bg-white rounded-2xl p-4 text-sm font-bold transition-all outline-none">
-                    <option value="">System Default</option>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Classification</label>
+                  <select className="input-field py-4 text-sm font-bold" value={form.category} onChange={e => setForm({...form, category: e.target.value})}>
+                    {categories.map(c => <option key={c.name} value={c.name}>{c.name}</option>)}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Priority Protocol</label>
+                  <select className="input-field py-4 text-sm font-bold" value={form.priority} onChange={e => setForm({...form, priority: e.target.value})}>
+                    <option value="High">High Priority</option>
+                    <option value="Medium">Medium Priority</option>
+                    <option value="Low">Low Priority</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Execution Date</label>
+                  <input type="date" className="input-field py-4 text-sm font-bold" value={form.dueDate} onChange={e => setForm({...form, dueDate: e.target.value})} />
+                </div>
+                <div className="md:col-span-2 space-y-2">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Assigned Profile</label>
+                  <select className="input-field py-4 text-sm font-bold" value={form.pet} onChange={e => setForm({...form, pet: e.target.value})}>
+                    <option value="">Select Pet Profile</option>
                     {pets.map(p => <option key={p._id} value={p._id}>{p.name}</option>)}
                   </select>
-                </div>
-                <div className="lg:col-span-3">
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Operational Category</label>
-                  <div className="grid grid-cols-5 gap-3">
-                    {categories.map(cat => (
-                      <button key={cat.name} type="button" onClick={() => setForm({...form, category: cat.name})}
-                        className={`flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all group ${form.category === cat.name ? 'border-primary-500 bg-primary-50 text-primary-600 shadow-lg shadow-primary-500/10' : 'border-slate-50 bg-slate-50 text-slate-400 hover:border-slate-200'}`}
-                      >
-                        <cat.icon className="w-6 h-6 mb-2" />
-                        <span className="text-[8px] font-black uppercase tracking-tighter">{cat.name}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Priority Level</label>
-                  <select value={form.priority} onChange={e => setForm({...form, priority: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent focus:border-primary-500 focus:bg-white rounded-2xl p-4 text-sm font-bold transition-all outline-none">
-                    <option>High</option><option>Medium</option><option>Low</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Deadline</label>
-                  <input type="date" value={form.dueDate} onChange={e => setForm({...form, dueDate: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent focus:border-primary-500 focus:bg-white rounded-2xl p-4 text-sm font-bold transition-all outline-none" />
                 </div>
               </div>
               <div className="mt-10 flex gap-4">
@@ -190,14 +202,14 @@ const Tasks = () => {
 
       {/* Task List Interface */}
       <div className="space-y-12">
-        {pending.length > 0 && (
+        {pendingTasks.length > 0 && (
           <div className="space-y-6">
             <h3 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] px-2 flex items-center gap-2">
                Active Objectives
                <div className="w-1.5 h-1.5 bg-amber-500 rounded-full"></div>
             </h3>
             <div className="grid gap-4">
-              {pending.map(task => {
+              {pendingTasks.map(task => {
                 const category = categories.find(c => c.name === task.category) || categories[4];
                 const meta = priorityMeta[task.priority] || priorityMeta.Medium;
                 return (
@@ -230,34 +242,47 @@ const Tasks = () => {
           </div>
         )}
 
-        {completed.length > 0 && (
-          <div className="space-y-6 opacity-60">
-            <h3 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] px-2">Finalized Tasks</h3>
-            <div className="grid gap-4">
-              {completed.map(task => (
-                <div key={task._id} className="bg-slate-50/50 rounded-3xl border border-dashed border-slate-200 p-5 flex items-center gap-6 group">
-                  <div className="text-emerald-500"><CheckCircle className="w-8 h-8" /></div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-base font-bold text-slate-400 line-through truncate">{task.title}</p>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1 italic">Objective Fulfilled</p>
+        {completedTasks.length > 0 && (
+          <div className="space-y-6">
+            <h3 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] px-2 flex items-center gap-2 opacity-50">
+               Archived Success
+            </h3>
+            <div className="grid gap-4 opacity-60 grayscale-[0.5]">
+              {completedTasks.map(task => {
+                const category = categories.find(c => c.name === task.category) || categories[4];
+                const meta = priorityMeta[task.priority] || priorityMeta.Medium;
+                return (
+                  <div key={task._id} className="bg-slate-50 rounded-3xl border border-slate-100 p-5 flex items-center gap-6">
+                    <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white">
+                      <CheckCircle className="w-5 h-5" />
+                    </div>
+                    <div className={`w-14 h-14 rounded-2xl ${category.bg} flex items-center justify-center`}>
+                      <category.icon className={`w-6 h-6 ${category.color}`} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-base font-black text-slate-400 line-through truncate">{task.title}</p>
+                      <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase">Completed via System Protocol</p>
+                    </div>
+                    <button onClick={() => deleteTask(task._id)} className="p-3 text-slate-300 hover:text-rose-400 transition-all">
+                      <Trash2 className="w-5 h-5" />
+                    </button>
                   </div>
-                  <button onClick={() => deleteTask(task._id)} className="opacity-0 group-hover:opacity-100 p-3 text-rose-400 hover:bg-rose-50 rounded-2xl transition-all">
-                    <Trash2 className="w-5 h-5" />
-                  </button>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
 
-        {tasks.length === 0 && (
-          <div className="text-center py-32 bg-white rounded-[3rem] border border-slate-100 shadow-soft">
-            <div className="w-24 h-24 bg-slate-50 rounded-[2.5rem] flex items-center justify-center mx-auto mb-6">
-              <ListChecks className="w-10 h-10 text-slate-200" />
-            </div>
-            <h3 className="text-xl font-black text-slate-800 tracking-tight italic uppercase">Matrix Idle</h3>
-            <p className="text-slate-400 text-sm font-medium mt-2 max-w-xs mx-auto">All pet care objectives have been resolved or not yet initialized.</p>
-            <button onClick={() => setShowForm(true)} className="btn-primary mt-8 px-10 py-4 text-[10px] font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-primary-500/20">Initialize Checklist</button>
+        {!loading && safeTasks.length === 0 && (
+          <div className="py-32 bg-white rounded-[3rem] border-2 border-dashed border-slate-100 flex flex-col items-center justify-center text-center space-y-4">
+             <div className="w-20 h-20 bg-slate-50 rounded-3xl flex items-center justify-center text-slate-200">
+                <ListChecks className="w-10 h-10" />
+             </div>
+             <div>
+                <h3 className="text-xl font-black text-slate-900">Zero Objectives</h3>
+                <p className="text-slate-400 text-sm font-medium">All systems operational. No pending tasks detected.</p>
+             </div>
+             <button onClick={() => setShowForm(true)} className="text-primary-600 font-black text-xs uppercase tracking-widest hover:underline">Manual Initialization</button>
           </div>
         )}
       </div>

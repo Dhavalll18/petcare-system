@@ -3,15 +3,18 @@ import { motion } from 'framer-motion';
 import { 
   Footprints, CalendarDays, ListChecks, TrendingUp, Plus, 
   ArrowRight, Bell, Clock, 
-  ChevronRight, Settings
+  ChevronRight, Settings, Sparkles
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import api from '../utils/api';
 import useAuthStore from '../store/authStore';
 
-// Professional Date Formatter
+// Professional Date Formatter (Crash-Proof)
 const formatDate = (dateString) => {
+  if (!dateString) return 'Pending Date';
   const date = new Date(dateString);
+  if (isNaN(date.getTime())) return 'Invalid Date';
+  
   const now = new Date();
   const diffDays = Math.floor((date - now) / (1000 * 60 * 60 * 24));
 
@@ -19,7 +22,11 @@ const formatDate = (dateString) => {
   if (diffDays === 1) return 'Tomorrow';
   if (diffDays > 1 && diffDays < 7) return `in ${diffDays} days`;
   
-  return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date);
+  try {
+    return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date);
+  } catch {
+    return date.toLocaleDateString();
+  }
 };
 
 const Dashboard = () => {

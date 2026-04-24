@@ -39,6 +39,10 @@ app.get('/', (req, res) => {
     res.send('Pet Care API is running...');
 });
 
+app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok', timestamp: new Date() });
+});
+
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/pets', require('./routes/petRoutes'));

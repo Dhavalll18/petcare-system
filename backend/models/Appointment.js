@@ -34,6 +34,7 @@ const appointmentSchema = new mongoose.Schema({
     reason: {
         type: String,
         required: [true, 'Please add a reason for the appointment'],
+        default: 'General checkup and consultation'
     },
     notes: {
         type: String, // Vet notes after completion or user special requests

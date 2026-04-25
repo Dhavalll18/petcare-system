@@ -37,7 +37,7 @@ const Schedule = () => {
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({ 
     pet: petFromQuery || '', 
-    serviceType: 'Checkup', 
+    serviceType: 'Veterinary Checkup', 
     date: new Date().toISOString().split('T')[0], 
     time: '10:00', 
     reason: '',
@@ -143,11 +143,23 @@ const Schedule = () => {
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">Service Classification</label>
                     <select className="input-field py-4 text-sm font-bold" value={form.serviceType} onChange={e => setForm({...form, serviceType: e.target.value})}>
-                      <option value="Checkup">Veterinary Checkup</option>
+                      <option value="Veterinary Checkup">Veterinary Checkup</option>
                       <option value="Grooming">Professional Grooming</option>
                       <option value="Training">Behavioral Training</option>
                       <option value="Boarding">Facility Boarding</option>
+                      <option value="Walking">Dog Walking</option>
+                      <option value="Other">Other Services</option>
                     </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">Reason for Visit</label>
+                    <textarea 
+                      className="input-field py-4 text-sm font-bold min-h-[100px] resize-none" 
+                      placeholder="Briefly describe the purpose of this visit..."
+                      value={form.reason} 
+                      onChange={e => setForm({...form, reason: e.target.value})}
+                    />
                   </div>
                 </div>
 
